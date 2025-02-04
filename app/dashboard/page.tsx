@@ -1,5 +1,5 @@
 import Profile from "@/components/profile";
-import { getCurrent } from "../api/actions";
+import { getCurrent } from "../actions";
 import { redirect } from "next/navigation";
 
 const DashboardPage = async () => {

@@ -1,9 +1,8 @@
 "use server";
 
+import { AUTH_COOKIE } from "@/constants";
 import { cookies } from "next/headers";
 import { Account, Client } from "node-appwrite";
-
-const AUTH_COOKIE = "next-hono-test-cookie";
 
 export const getCurrent = async () => {
 	try {

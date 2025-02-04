@@ -1,29 +1,19 @@
 "use client";
 import { Button } from "@/components/ui/button";
-import {
-	Form,
-	FormField,
-	FormItem,
-	FormLabel,
-	FormMessage,
-} from "@/components/ui/form";
+import { Form, FormField, FormItem, FormMessage } from "@/components/ui/form";
 import React, { useState } from "react";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { Input } from "@/components/ui/input";
-import { useLogin } from "@/app/api/mutations/use-login";
+import { useSignup } from "@/app/mutations/use-signup";
+import { formSchema } from "@/schemas";
 
-export const formSchema = z.object({
-	name: z.string(),
-	email: z.string(),
-	password: z.string(),
-});
 
 const LoginForm = () => {
 	const [processing, setProcessing] = useState(false);
 
-	const { mutate } = useLogin();
+	const { mutate } = useSignup();
 
 	const form = useForm<z.infer<typeof formSchema>>({
 		resolver: zodResolver(formSchema),
@@ -33,8 +23,10 @@ const LoginForm = () => {
 			password: "",
 		},
 	});
+
 	const handleSubmit = async (values: z.infer<typeof formSchema>) => {
 		setProcessing(true);
+		console.log(values);
 		mutate({ json: values });
 		setProcessing(false);
 	};

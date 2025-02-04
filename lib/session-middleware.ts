@@ -16,8 +16,6 @@ import { getCookie } from "hono/cookie";
 import { createMiddleware } from "hono/factory";
 import { AUTH_COOKIE } from "@/constants";
 
-
-
 type AdditionalContext = {
 	Variables: {
 		account: AccountType;
