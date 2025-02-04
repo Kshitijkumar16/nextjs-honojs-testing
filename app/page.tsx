@@ -1,18 +1,12 @@
-import LoginForm from "@/components/loginform";
+import Greeting from "@/components/landing-screen/greeting";
 import React from "react";
-import { getCurrent } from "./actions";
-import { redirect } from "next/navigation";
 
-const BasePage = async () => {
-	const user = await getCurrent();
-
-	if (user) redirect("/dashboard");
-
+const LandingPage = () => {
 	return (
-		<div>
-			<LoginForm />
+		<div className=''>
+			<Greeting />
 		</div>
 	);
 };
 
-export default BasePage;
+export default LandingPage;

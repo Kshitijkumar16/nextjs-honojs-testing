@@ -1,7 +1,7 @@
 "use client";
 import React from "react";
 import { Button } from "./ui/button";
-import { useLogout } from "@/app/mutations/use-logout";
+import { useLogout } from "@/mutations/login-feature/use-logout";
 
 const Profile = () => {
 	const { mutate } = useLogout();
