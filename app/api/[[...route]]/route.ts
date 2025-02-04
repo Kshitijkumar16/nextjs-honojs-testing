@@ -1,7 +1,7 @@
 import { Hono } from "hono";
 import { handle } from "hono/vercel";
 
-import variable from "@/app/server/route";
+import variable from "@/app/server/routes";
 
 const app = new Hono().basePath("/api");
 
