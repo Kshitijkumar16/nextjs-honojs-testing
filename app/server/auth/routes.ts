@@ -34,6 +34,8 @@ const app = new Hono()
 
 		const userId = token.userId;
 
+		console.log("userId: " + userId);
+
 		return c.json({ userId });
 	})
 	.post("/verifyotp", zValidator("json", verifyOTPSchema), async (c) => {
@@ -41,16 +43,35 @@ const app = new Hono()
 
 		const { account } = await createAdminClient();
 
-		const session = await account.createSession(userId, secret);
+		try {
+			const session = await account.createSession(userId, secret);
 
-		setCookie(c, AUTH_COOKIE, session.secret, {
-			path: "/",
-			secure: true,
-			httpOnly: true,
-			maxAge: keepSignedIn ? 60 * 60 * 24 * 365 : 60 * 60 * 24 * 30,
-			sameSite: "strict",
-		});
+			console.log(session);
 
+			setCookie(c, AUTH_COOKIE, session.secret, {
+				path: "/",
+				secure: true,
+				httpOnly: true,
+				maxAge: keepSignedIn ? 60 * 60 * 24 * 365 : 60 * 60 * 24 * 30,
+				sameSite: "strict",
+			});
+		} catch (error: any) {
+			console.error("Signup error details:", {
+				message: error.message,
+				code: error.code,
+				type: error.type,
+				stack: error.stack,
+			});
+
+			return c.json(
+				{
+					error: error.message || "Failed to create account",
+					code: error.code,
+					type: error.type,
+				},
+				500
+			);
+		}
 		return c.json({ success: "ok" });
 	})
 	.post("/signup", zValidator("json", formSchema), async (c) => {
@@ -76,7 +97,7 @@ const app = new Hono()
 				sameSite: "strict",
 			});
 
-			return c.json({ data: user });
+			return c.json({ success: "ok" });
 		} catch (error: any) {
 			console.error("Signup error details:", {
 				message: error.message,

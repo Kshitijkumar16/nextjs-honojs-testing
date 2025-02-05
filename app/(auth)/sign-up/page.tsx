@@ -20,23 +20,24 @@ import { isValidPhoneNumber } from "libphonenumber-js/max";
 import { toast } from "@/hooks/use-toast";
 
 import { PhoneInput } from "react-international-phone";
+import { cn } from "@/lib/utils";
+import { REGEXP_ONLY_DIGITS_AND_CHARS } from "input-otp";
+import Image from "next/image";
+import { images } from "@/constants";
+import "react-international-phone/style.css";
+import { useSignup } from "@/mutations/login-feature/use-signup";
+import FlipButton from "@/components/ui/flip-button";
+import Timer from "@/components/ui/timer";
 import {
 	InputOTP,
 	InputOTPGroup,
 	InputOTPSeparator,
 	InputOTPSlot,
-} from "../ui/input-otp";
-import FlipButton from "../ui/flip-button";
-import { Checkbox } from "../ui/checkbox";
-import { cn } from "@/lib/utils";
-import { REGEXP_ONLY_DIGITS_AND_CHARS } from "input-otp";
-import Image from "next/image";
-import { images } from "@/constants";
-import Timer from "../ui/timer";
-import "react-international-phone/style.css";
-import { useSignup } from "@/mutations/login-feature/use-signup";
+} from "@/components/ui/input-otp";
+import { Checkbox } from "@/components/ui/checkbox";
 
 const LoginForm = () => {
+	const { mutate: callAPIsendOTP } = useSendOTP();
 	const { mutate: callAPIverifyOTP } = useVerifyOTP();
 	const { mutate: callSignUP } = useSignup();
 
@@ -82,7 +83,7 @@ const LoginForm = () => {
 
 		setIsOtpSent(true);
 
-		// callAPIsendOTP({ json: values });
+		callAPIsendOTP({ json: values });
 	};
 
 	const handleResendComplete = () => {

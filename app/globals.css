@@ -33,8 +33,20 @@ body {
     @apply lg:px-14 sm:px-8 px-5;
   }
 
+  .pl {
+    @apply lg:pl-14 sm:pl-8 pl-5;
+  }
+
+  .pr {
+    @apply lg:pr-14 sm:pr-8 pr-5;
+  }
+
   .py {
     @apply lg:py-10 sm:py-8 py-6
+  }
+
+  .my {
+    @apply lg:my-10 sm:my-8 my-6
   }
 
   .pt {

@@ -8,8 +8,14 @@ import InstructionAnimation from "./instruction-animation";
 import { useState } from "react";
 import { Loader } from "lucide-react";
 
-const Greeting = () => {
+const Greeting = ({ target }: { target: TargetType }) => {
 	const [processing, setProcessing] = useState(false);
+
+	let buttonTitle = "";
+
+	if (target === "/login") buttonTitle = "Yes! Let's begin!";
+	if (target === "/onboarding") buttonTitle = "Finish onboarding";
+	if (target === "/dashboard") buttonTitle = "Continue to dashboard";
 
 	return (
 		<div className='relative h-screen w-screen flex justify-center items-center overflow-clip'>
@@ -31,11 +37,11 @@ const Greeting = () => {
 				<div className='pointer-events-auto flex flex-col justify-center items-center lg:mt-4'>
 					<div className=''>
 						<Link
-							href={"/login"}
+							href={`${target}`}
 							onClick={() => setProcessing(true)}
 						>
 							<FlipButton
-								title={processing ? "Redirecting..." : "Yes! Let's begin"}
+								title={processing ? "Redirecting..." : `${buttonTitle}`}
 								divClasses='bg-white rounded-full shadow-whiteGlow'
 								textClasses='subheading font-branch text-black lg:px-14 px-10 py-3'
 							/>
