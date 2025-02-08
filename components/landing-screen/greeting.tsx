@@ -39,11 +39,12 @@ const Greeting = ({ target }: { target: TargetType }) => {
 						<Link
 							href={`${target}`}
 							onClick={() => setProcessing(true)}
+							className=''
 						>
 							<FlipButton
 								title={processing ? "Redirecting..." : `${buttonTitle}`}
-								divClasses='bg-white rounded-full shadow-whiteGlow'
-								textClasses='subheading font-branch text-black lg:px-14 px-10 py-3'
+								divClasses=' bg-white rounded-full shadow-whiteGlow'
+								textClasses=' subheading font-branch text-black lg:px-14 px-10 py-3'
 							/>
 						</Link>
 					</div>

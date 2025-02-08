@@ -51,3 +51,9 @@ export const Instructions: { text: string; attribute: "normal" | "boxed" }[][] =
 			{ text: "journey?", attribute: "boxed" },
 		],
 	];
+
+export const GenderList: { title: string; value: string }[] = [
+	{ title: "Male", value: "male" },
+	{ title: "Female", value: "female" },
+	{ title: "Other", value: "other" },
+];

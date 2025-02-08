@@ -24,7 +24,9 @@ const Timer = ({ seconds, onComplete }: TimerProps) => {
 	}, [timeLeft, onComplete]);
 
 	return (
-		<p className='text-white/70 font-branch text-lg'>Resend in {timeLeft}s</p>
+		<p className='text-white/70 font-branch h-[60px] rounded-full border border-white/20 w-full flex justify-center items-center md:text-[24px] text-[20px] cursor-not-allowed'>
+			Resend in {timeLeft}s
+		</p>
 	);
 };
 
