@@ -1,6 +1,19 @@
 "use client";
 
-import { Button } from "@/components/ui/button";
+// global imports
+import { z } from "zod";
+import { useState } from "react";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useForm } from "react-hook-form";
+import { PhoneInput } from "react-international-phone";
+import { isValidPhoneNumber } from "libphonenumber-js/max";
+import { toast } from "@/hooks/use-toast";
+import Autoplay from "embla-carousel-autoplay";
+import Image from "next/image";
+import gsap from "gsap";
+import { ScrollToPlugin } from "gsap/ScrollToPlugin";
+
+// local imports
 import {
 	Form,
 	FormControl,
@@ -8,31 +21,21 @@ import {
 	FormItem,
 	FormMessage,
 } from "@/components/ui/form";
-import React, { useEffect, useState } from "react";
-import { z } from "zod";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { useForm } from "react-hook-form";
-import { sendOTPSchema, verifyOTPSchema } from "@/validators/login-schemas";
-import { useSendOTP } from "@/mutations/onboarding-feature/use-sendotp";
-import { useVerifyOTP } from "@/mutations/onboarding-feature/use-verifyotp";
-
-import { isValidPhoneNumber } from "libphonenumber-js/max";
-
-import { toast } from "@/hooks/use-toast";
-
-import { PhoneInput } from "react-international-phone";
 import {
 	InputOTP,
 	InputOTPGroup,
 	InputOTPSeparator,
 	InputOTPSlot,
 } from "../ui/input-otp";
-import FlipButton from "../ui/flip-button";
-import { Checkbox } from "../ui/checkbox";
-import { REGEXP_ONLY_DIGITS } from "input-otp";
-import Timer from "../ui/timer";
-import "react-international-phone/style.css";
-import { useSignup } from "@/mutations/login-feature/use-signup";
+import { Popover, PopoverContent, PopoverTrigger } from "../ui/popover";
+import {
+	Command,
+	CommandEmpty,
+	CommandGroup,
+	CommandInput,
+	CommandItem,
+	CommandList,
+} from "../ui/command";
 
 import {
 	Carousel,
@@ -41,10 +44,10 @@ import {
 	CarouselNext,
 	CarouselPrevious,
 } from "@/components/ui/carousel";
-import { GenderList, images } from "@/constants";
-import Image from "next/image";
-
-import Autoplay from "embla-carousel-autoplay";
+import { Input } from "../ui/input";
+import { Textarea } from "../ui/textarea";
+import { Label } from "../ui/label";
+import { Button } from "@/components/ui/button";
 import {
 	ArrowLeft,
 	ArrowRight,
@@ -58,22 +61,18 @@ import {
 	Youtube,
 	YoutubeIcon,
 } from "lucide-react";
+
+import Timer from "../ui/timer";
+import FlipButton from "../ui/flip-button";
 import Marquee from "../ui/text-marquee";
-import { onboardingFormSchema } from "@/validators/login-schemas";
-import { Input } from "../ui/input";
+
+import { REGEXP_ONLY_DIGITS } from "input-otp";
+import "react-international-phone/style.css";
 import { cn } from "@/lib/utils";
-import { Label } from "../ui/label";
-import { Popover, PopoverContent, PopoverTrigger } from "../ui/popover";
-import {
-	Command,
-	CommandEmpty,
-	CommandGroup,
-	CommandInput,
-	CommandItem,
-	CommandList,
-} from "../ui/command";
-import { Textarea } from "../ui/textarea";
-import { hasNonStaticMethods } from "next/dist/server/route-modules/app-route/module";
+import { GenderList, images } from "@/constants";
+import { onboardingFormSchema } from "@/validators/login-schemas";
+import { useSendOTP } from "@/mutations/onboarding-feature/use-sendotp";
+import { useVerifyOTP } from "@/mutations/onboarding-feature/use-verifyotp";
 
 const OnboardingForm = () => {
 	const carousalArray = [images.mg4, images.mg8, images.mg5, images.mg15];
@@ -81,21 +80,19 @@ const OnboardingForm = () => {
 	const [isOtpSent, setIsOtpSent] = useState<boolean>(false);
 	const [showResendTimer, setShowResendTimer] = useState<boolean>(false);
 	const [otpFilled, setOTPFilled] = useState<boolean>(false);
-
 	const [processing, setProcessing] = useState(false);
+
+	const { mutate: callAPIsendOTP } = useSendOTP();
+	const { mutate: callAPIverifyOTP } = useVerifyOTP();
 
 	const onboardingForm = useForm<z.infer<typeof onboardingFormSchema>>({
 		resolver: zodResolver(onboardingFormSchema),
 		defaultValues: {
-			firstName: "",
-			lastName: "",
-			age: undefined,
-			secret: "",
-			phoneNumber: "",
+			age: 1,
 		},
 	});
 
-	const handleSendOTP = async (phoneNumber: string) => {
+	const handleSendOTP = async (phoneNumber: string, password: string) => {
 		if (phoneNumber === "" || !phoneNumber || phoneNumber.length <= 3) {
 			toast({
 				title: "Phone number empty.",
@@ -117,7 +114,30 @@ const OnboardingForm = () => {
 
 		setIsOtpSent(true);
 
-		// callAPIsendOTP({ json: values });
+		callAPIsendOTP(
+			{ json: { phoneNumber, password } },
+			{
+				onSuccess: (res) => {
+					console.log("Res: " + res);
+					const userId = res.json;
+					console.log("onSuccess => UserId: " + userId);
+					onboardingForm.setValue("userId", userId);
+					toast({
+						title: "OTP sent!",
+						description: "Copy the OTP from your text messages.",
+						variant: "success",
+					});
+				},
+				onError: () => {
+					toast({
+						title: "Something went wrong.",
+						description: "Please try again / check your internet.",
+						variant: "destructive",
+					});
+					setIsOtpSent(false);
+				},
+			}
+		);
 	};
 
 	const handleResendComplete = () => {
@@ -125,7 +145,47 @@ const OnboardingForm = () => {
 		setIsOtpSent(false);
 	};
 
-	const handleSubmit = async (values: z.infer<typeof verifyOTPSchema>) => {
+	const handleFormErrors = () => {
+		let ref;
+		const ph = onboardingForm.getValues("phoneNumber");
+
+		const errors = onboardingForm.formState.errors;
+		// console.log("error exists" + JSON.stringify(errors));
+
+		if (ph === "" || !ph || ph.length <= 3 || !isValidPhoneNumber(ph)) {
+			ref = "phoneNumber";
+
+			toast({
+				title: "Invalid Phone Number",
+				description:
+					"Please enter a valid phone number for the selected country",
+				variant: "destructive",
+			});
+			return;
+		}
+
+		if (errors && Object.keys(errors).length > 0) {
+			console.log(Object.keys(errors).length);
+			console.log(errors);
+			ref = Object.keys(errors)[0];
+
+			console.log("element: " + ref);
+
+			gsap.registerPlugin(ScrollToPlugin);
+			gsap.to(window, {
+				duration: 0.5,
+				scrollTo: {
+					y: `#${ref}`,
+					offsetY: 100,
+				},
+				ease: "sine.inOut",
+			});
+		}
+	};
+
+	const handleSubmit = async (values: z.infer<typeof onboardingFormSchema>) => {
+		setProcessing(true);
+
 		if (values.secret.length !== 6) {
 			toast({
 				title: "Invalid OTP",
@@ -135,7 +195,32 @@ const OnboardingForm = () => {
 			return;
 		}
 
-		console.log(JSON.stringify(values));
+		console.log("In form userId: " + onboardingForm.getValues("userId"));
+
+		console.log("step before");
+
+		callAPIverifyOTP(
+			{ json: values },
+			{
+				onSuccess: () => {
+					toast({
+						title: "Step completed!",
+						description: "Redirecting you to the Dashboard...",
+						variant: "success",
+					});
+				},
+				onError: () => {
+					toast({
+						title: "Something went wrong.",
+						description: "Please enter a valid OTP to continue.",
+						variant: "destructive",
+					});
+				},
+			}
+		);
+
+		console.log("step after");
+		setProcessing(false);
 	};
 
 	return (
@@ -259,46 +344,55 @@ const OnboardingForm = () => {
 					{/* form */}
 					<Form {...onboardingForm}>
 						<form>
+							{/* standard info */}
 							<div className='w-full mt-[40px] container '>
 								<p className='container-title text-white font-branch lg:mb-8 mb-6'>
 									Standard info
 								</p>
 								<div className='flex justify-between md:flex-row flex-col lg:gap-8 gap-6'>
+									{/* first name */}
 									<FormField
 										control={onboardingForm.control}
 										name='firstName'
 										render={({ field }) => (
-											<FormControl className='w-full'>
+											<FormControl
+												id='firstName'
+												className='w-full'
+											>
 												<FormItem>
 													<Label className='label text-white/50'>
-														First name
+														<p>First name *</p>
 													</Label>
 													<Input
 														onChange={field.onChange}
 														placeholder='Danerys'
-														className={cn("form-input pl-6 pr-3")}
+														className={cn("form-input pl-6 pr-3 mt-2.5")}
 													/>
-													<FormMessage className='font-mona font-light text-[16px] pt-1' />
+													<FormMessage className='font-mona font-light text-[16px] pt-1 text-red-500' />
 												</FormItem>
 											</FormControl>
 										)}
 									/>
 
+									{/* last name */}
 									<FormField
 										control={onboardingForm.control}
 										name='lastName'
 										render={({ field }) => (
-											<FormControl className='w-full'>
+											<FormControl
+												id='lastName'
+												className='w-full'
+											>
 												<FormItem className='w-full'>
 													<Label className='label text-white/50'>
-														Last name
+														<p>Last name *</p>
 													</Label>
 													<Input
 														onChange={field.onChange}
 														placeholder='Targaryn'
-														className={cn("form-input pl-6 pr-3")}
+														className={cn("form-input pl-6 pr-3 mt-2.5")}
 													/>
-													<FormMessage className='font-mona font-light text-[16px] pt-1' />
+													<FormMessage className='font-mona font-light text-[16px] pt-1 text-red-500' />
 												</FormItem>
 											</FormControl>
 										)}
@@ -306,33 +400,45 @@ const OnboardingForm = () => {
 								</div>
 
 								<div className='flex justify-between xl:gap-8 gap-5 md:mt-8 mt-6'>
+									{/* age */}
 									<FormField
 										control={onboardingForm.control}
 										name='age'
 										render={({ field }) => (
-											<FormControl className='md:w-[400px] w-full'>
+											<FormControl
+												id='age'
+												className='md:w-[400px] w-full'
+											>
 												<FormItem>
-													<Label className='label text-white/50'>Age</Label>
+													<Label className='label text-white/50'>
+														<p>Age *</p>
+													</Label>
 													<Input
-														onChange={field.onChange}
 														placeholder='21'
-														className={cn("form-input pl-6 pr-3")}
+														type='number'
+														min={0}
+														onChange={field.onChange}
+														className={cn("form-input pl-6 pr-3 mt-2.5")}
 													/>
-													<FormMessage className='font-mona font-light text-[16px] pt-1' />
+													<FormMessage className='font-mona font-light text-[16px] pt-1 text-red-500' />
 												</FormItem>
 											</FormControl>
 										)}
 									/>
 
+									{/* gender */}
 									<FormField
 										control={onboardingForm.control}
 										name='gender'
 										render={({ field }) => (
-											<FormControl className='w-full'>
+											<FormControl
+												id='gender'
+												className='w-full'
+											>
 												<FormItem>
 													<div className='flex flex-col'>
 														<Label className='label text-white/50'>
-															Gender
+															<p>Gender *</p>
 														</Label>
 
 														<Popover>
@@ -343,7 +449,8 @@ const OnboardingForm = () => {
 																		role='combobox'
 																		className={cn(
 																			"w-full h-[60px] md:text-[24px] text-[20px] text-white justify-between font-mona font-light bg-zinc-900 rounded-full px-5",
-																			"mt-4",
+																			"mt-2",
+																			"border border-transparent hover:border-white/20",
 																			!field.value && "text-white/25"
 																		)}
 																	>
@@ -398,7 +505,7 @@ const OnboardingForm = () => {
 															</PopoverContent>
 														</Popover>
 													</div>
-													<FormMessage className='font-mona font-light text-[16px] pt-1' />
+													<FormMessage className='font-mona font-light text-[16px] pt-1 text-red-500' />
 												</FormItem>
 											</FormControl>
 										)}
@@ -406,159 +513,107 @@ const OnboardingForm = () => {
 								</div>
 							</div>
 
+							{/* your goals */}
 							<div className='w-full mt-[40px] container'>
 								<p className='container-title text-white font-branch lg:mb-8 mb-6'>
 									Your goals
 								</p>
 								<div className='flex justify-between lg:gap-8 gap-6'>
-									<FormField
-										control={onboardingForm.control}
-										name='blank'
-										render={({ field }) => (
-											<FormControl className='w-full'>
-												<FormItem className='w-full'>
-													<Label className='label text-white/50'>
-														Demo question
-													</Label>
-													<Input
-														onChange={field.onChange}
-														placeholder='Demo answer'
-														className={cn("form-input pl-6 pr-3")}
-													/>
-													<FormMessage className='font-mona font-light text-[16px] pt-1' />
-												</FormItem>
-											</FormControl>
-										)}
-									/>
-									<FormField
-										control={onboardingForm.control}
-										name='blank'
-										render={({ field }) => (
-											<FormControl className='w-full'>
-												<FormItem className='w-full'>
-													<Label className='label text-white/50'>
-														Demo question
-													</Label>
-													<Input
-														onChange={field.onChange}
-														placeholder='Demo answer'
-														className={cn("form-input pl-6 pr-3")}
-													/>
-													<FormMessage className='font-mona font-light text-[16px] pt-1' />
-												</FormItem>
-											</FormControl>
-										)}
-									/>
+									<div className='w-full'>
+										<Label className=' label text-white/50'>
+											<p>Demo question</p>
+										</Label>
+										<Input
+											placeholder='Demo answer'
+											className={cn("form-input pl-6 pr-3 mt-2.5")}
+										/>
+									</div>
+
+									<div className='w-full'>
+										<Label className='label text-white/50'>
+											<p>Demo question</p>
+										</Label>
+										<Input
+											placeholder='Demo answer'
+											className={cn("form-input pl-6 pr-3 mt-2.5")}
+										/>
+									</div>
 								</div>
 
 								<div className='md:mt-8 mt-6'>
-									<FormField
-										control={onboardingForm.control}
-										name='blank'
-										render={({ field }) => (
-											<FormControl className='w-full'>
-												<FormItem className='w-full'>
-													<Label className='label text-white/50'>
-														What you want to achieve?
-													</Label>
-													<Textarea
-														className='bg-zinc-900 form-input rounded-[24px] min-h-[200px] py-6 px-6 leading-normal'
-														placeholder='I want to...'
-													/>
-													<FormMessage className='font-mona font-light text-[16px] pt-1' />
-												</FormItem>
-											</FormControl>
-										)}
-									/>
+									<div className='w-full'>
+										<Label className='label text-white/50'>
+											<p>What you want to achieve?</p>
+										</Label>
+										<Textarea
+											className='mt-2.5 bg-zinc-900 form-input rounded-[24px] min-h-[200px] py-6 px-6 leading-normal'
+											placeholder='I want to...'
+										/>
+									</div>
 								</div>
 							</div>
 
+							{/* therapy history */}
 							<div className='w-full mt-[40px] container'>
 								<p className='container-title text-white font-branch lg:mb-8 mb-6'>
 									Therapy history
 								</p>
 								<div className='flex justify-between lg:gap-8 gap-6'>
-									<FormField
-										control={onboardingForm.control}
-										name='blank'
-										render={({ field }) => (
-											<FormControl className='w-full'>
-												<FormItem className='w-full'>
-													<Label className='label text-white/50'>
-														Demo question
-													</Label>
-													<Input
-														onChange={field.onChange}
-														placeholder='Demo answer'
-														className={cn("form-input pl-6 pr-3")}
-													/>
-													<FormMessage className='font-mona font-light text-[16px] pt-1' />
-												</FormItem>
-											</FormControl>
-										)}
-									/>
-									<FormField
-										control={onboardingForm.control}
-										name='blank'
-										render={({ field }) => (
-											<FormControl className='w-full'>
-												<FormItem className='w-full'>
-													<Label className='label text-white/50'>
-														Demo question
-													</Label>
-													<Input
-														onChange={field.onChange}
-														placeholder='Demo answer'
-														className={cn("form-input pl-6 pr-3")}
-													/>
-													<FormMessage className='font-mona font-light text-[16px] pt-1' />
-												</FormItem>
-											</FormControl>
-										)}
-									/>
+									<div className='w-full'>
+										<Label className='label text-white/50'>
+											<p>Demo question</p>
+										</Label>
+										<Input
+											placeholder='Demo answer'
+											className={cn("form-input pl-6 pr-3 mt-2.5")}
+										/>
+									</div>
+
+									<div className='w-full'>
+										<Label className='label text-white/50'>
+											<p>Demo question</p>
+										</Label>
+										<Input
+											placeholder='Demo answer'
+											className={cn("form-input pl-6 pr-3 mt-2.5")}
+										/>
+									</div>
 								</div>
 
 								<div className='md:mt-8 mt-6'>
-									<FormField
-										control={onboardingForm.control}
-										name='blank'
-										render={({ field }) => (
-											<FormControl className='w-full'>
-												<FormItem className='w-full'>
-													<Label className='label text-white/50'>
-														Demo question
-													</Label>
-													<Input
-														onChange={field.onChange}
-														placeholder='Demo answer'
-														className={cn("form-input pl-6 pr-3")}
-													/>
-													<FormMessage className='font-mona font-light text-[16px] pt-1' />
-												</FormItem>
-											</FormControl>
-										)}
-									/>
+									<div className='w-full'>
+										<Label className='label text-white/50'>
+											<p>Demo question</p>
+										</Label>
+										<Input
+											placeholder='Demo answer'
+											className={cn("form-input pl-6 pr-3 mt-2.5")}
+										/>
+										<FormMessage className='font-mona font-light text-[16px] pt-1 text-red-500' />
+									</div>
 								</div>
 							</div>
 
+							{/* simple verification */}
 							<div className='w-full mt-[40px] container'>
 								<p className='container-title text-white font-branch lg:mb-8 mb-6'>
 									Simple verification
 								</p>
-								<div className=''>
+								<div className='pt-1 flex justify-between md:flex-row flex-col gap-6'>
 									<FormField
 										control={onboardingForm.control}
 										name='phoneNumber'
 										render={({ field }) => (
-											<FormControl>
+											<FormControl id='phoneNumber'>
 												<FormItem>
-													<Label className='label text-white/50'>
-														Phone number
+													<Label className='label text-white/50 '>
+														<p>Phone number</p>
 													</Label>
-													<div className='flex justify-center w-full bg-zinc-900 rounded-full'>
+													<p className='h-[1px]'></p>
+													<div className='flex justify-center flex-1 bg-zinc-900 rounded-full'>
 														<div
 															className={cn(
-																"pt-1 ",
+																"",
 																isOtpSent && "opacity-50 cursor-not-allowed"
 															)}
 														>
@@ -571,9 +626,11 @@ const OnboardingForm = () => {
 																	color: "white",
 																	backgroundColor: "transparent",
 																	height: "60px",
+																	padding: "0px 20px 0px 20px",
+																	margin: "0px",
 																	fontSize: "24px",
-																	borderRadius: "999px",
 																	border: "none",
+																	borderRadius: "999px",
 																	width: "100%",
 																	overflowX: "scroll",
 																}}
@@ -582,6 +639,7 @@ const OnboardingForm = () => {
 																		backgroundColor: "transparent",
 																		border: "none",
 																		height: "60px",
+																		padding: "0px 0px 0px 32px",
 																		borderRadius: "999px",
 																		aspectRatio: "square",
 																		color: "white",
@@ -603,65 +661,91 @@ const OnboardingForm = () => {
 																}}
 																placeholder='Phone number'
 																className={cn(
-																	"font-branch rounded-full py-0.5 tracking-widest",
-																	"translate-x-12 "
+																	"font-branch rounded-full tracking-widest",
+																	"border border-transparent hover:border-white/20",
+																	"h-[60px]"
 																)}
-														/>
+															/>
 														</div>
 													</div>
+												</FormItem>
+											</FormControl>
+										)}
+									/>
 
-													<div>
-														{!isOtpSent ? (
-															<Button
-																type='button'
-																onClick={() => {
-																	handleSendOTP(
-																		onboardingForm.getValues("phoneNumber")
-																	);
-																	setShowResendTimer(true);
-																}}
-																disabled={isOtpSent}
-																className='cursor-pointer bg-transparent mt-8 w-full p-0'
-															>
-																<FlipButton
-																	title='Send OTP'
-																	divClasses='bg-white px rounded-full h-[60px] w-full'
-																	textClasses='md:text-[24px] text-[20px] h-[60px] font-branch text-black '
-																/>
-															</Button>
-														) : showResendTimer ? (
-															<div className='pt-5 flex justify-center items-center w-full'>
-																<Timer
-																	seconds={120}
-																	onComplete={handleResendComplete}
-																/>
-															</div>
-														) : (
-															<Button
-																type='button'
-																onClick={() => {
-																	handleSendOTP(
-																		onboardingForm.getValues("phoneNumber")
-																	);
-																	setShowResendTimer(true);
-																}}
-																disabled={isOtpSent}
-																className='cursor-pointer bg-transparent mt-8 w-full p-0'
-															>
-																<FlipButton
-																	title='Resend OTP'
-																	divClasses='border border-white px rounded-full h-[60px] w-full'
-																	textClasses='md:text-[24px] text-[20px] h-[60px] font-branch text-white '
-																/>
-															</Button>
-														)}
-													</div>
+									<FormField
+										control={onboardingForm.control}
+										name='password'
+										render={({ field }) => (
+											<FormControl
+												id='password'
+												className='flex-1'
+											>
+												<FormItem className='w-full'>
+													<Label className='label text-white/50'>
+														<p>Password</p>
+													</Label>
+													<p className='h-[1px]'></p>
+													<Input
+														onChange={field.onChange}
+														placeholder='Your password'
+														className={cn("form-input pl-6 pr-3 mt-2.5")}
+													/>
+													<FormMessage className='font-mona font-light text-[16px] pt-1 text-red-500' />
 												</FormItem>
 											</FormControl>
 										)}
 									/>
 								</div>
 
+								<div>
+									{!isOtpSent ? (
+										<Button
+											type='button'
+											onClick={() => {
+												handleSendOTP(
+													onboardingForm.getValues("phoneNumber"),
+													onboardingForm.getValues("password")
+												);
+												setShowResendTimer(true);
+											}}
+											disabled={isOtpSent}
+											className='cursor-pointer bg-transparent mt-8 w-full p-0'
+										>
+											<FlipButton
+												title='Send OTP'
+												divClasses=' bg-white px rounded-full h-[60px] w-full'
+												textClasses=' md:text-[24px] text-[20px] h-[60px] font-branch text-black '
+											/>
+										</Button>
+									) : showResendTimer ? (
+										<div className='pt-5 flex justify-center items-center w-full'>
+											<Timer
+												seconds={120}
+												onComplete={handleResendComplete}
+											/>
+										</div>
+									) : (
+										<Button
+											type='button'
+											onClick={() => {
+												handleSendOTP(
+													onboardingForm.getValues("phoneNumber"),
+													onboardingForm.getValues("password")
+												);
+												setShowResendTimer(true);
+											}}
+											disabled={isOtpSent}
+											className='cursor-pointer bg-transparent mt-8 w-full p-0'
+										>
+											<FlipButton
+												title='Resend OTP'
+												divClasses='border border-white px rounded-full h-[60px] w-full'
+												textClasses='md:text-[24px] text-[20px] h-[60px] font-branch text-white '
+											/>
+										</Button>
+									)}
+								</div>
 								<div
 									className={cn(
 										"w-full",
@@ -673,9 +757,9 @@ const OnboardingForm = () => {
 										name='secret'
 										render={({ field }) => (
 											<FormControl>
-												<FormItem className=''>
+												<FormItem className='pt-2'>
 													<Label className='label text-white/50'>
-														One-time password
+														<p>One-time password</p>
 													</Label>
 													<div className='w-full pt-2'>
 														<div className='w-full'>
@@ -726,14 +810,20 @@ const OnboardingForm = () => {
 									/>
 								</div>
 							</div>
+
+							{/* submit button */}
 							<div className='mt-[40px]'>
 								<Button
 									type='submit'
-									onClick={() => onboardingForm.handleSubmit(handleSubmit)}
-									disabled={otpFilled === false}
+									onClick={(e) => {
+										e.preventDefault();
+										handleFormErrors();
+										onboardingForm.handleSubmit(handleSubmit)();
+									}}
+									disabled={otpFilled === false || processing === true}
 									className='cursor-pointer w-full p-0 2xl:h-[308px] h-[200px]'
 								>
-									<p className='bg-green-700/80 hover:bg-green-700 transition-colors duration-200 ease-in text-white text-center font-branch subheading w-full 2xl:h-[308px] h-[200px] rounded-[24px] leading-none flex items-center justify-center whitespace-normal'>
+									<p className='bg-green-700/80 hover:bg-green-700 transition-colors duration-200 ease-in text-white text-center font-branch subheading w-full 2xl:h-[308px] h-[200px] rounded-[24px] leading-none flex items-center justify-center whitespace-normal active:bg-white'>
 										Verify
 										<span className='max-md:hidden'>&nbsp;OTP&nbsp;</span> &
 										save <span className='max-md:hidden'>&nbsp;details</span>

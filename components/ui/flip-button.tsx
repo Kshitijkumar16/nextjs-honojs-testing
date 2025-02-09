@@ -22,14 +22,17 @@ const FlipButton = ({ title, divClasses, textClasses }: FlipButtonProps) => {
 			onPointerLeave={() => setIsHovered(false)}
 			animate={isHovered ? "hovered" : "notHovered"}
 			className={cn(
-				"relative overflow-hidden flex justify-center items-center bg-transparent",
+				"relative overflow-hidden flex justify-center items-center bg-transparent cursor-pointer",
 				divClasses
 			)}
 		>
 			<motion.p
 				variants={{ hovered: { y: "-100%" }, notHovered: { y: 0 } }}
 				transition={{ duration: 0.2, ease: "easeOut" }}
-				className={cn("flex justify-center items-center", textClasses)}
+				className={cn(
+					"flex justify-center items-center cursor-pointer",
+					textClasses
+				)}
 			>
 				{title}
 			</motion.p>
@@ -37,7 +40,7 @@ const FlipButton = ({ title, divClasses, textClasses }: FlipButtonProps) => {
 				variants={{ hovered: { y: 0 }, notHovered: { y: "100%" } }}
 				transition={{ duration: 0.2, ease: "easeOut" }}
 				className={cn(
-					"absolute flex justify-center items-center h-full w-full",
+					"absolute flex justify-center items-center h-full w-full cursor-pointer",
 					textClasses
 				)}
 			>

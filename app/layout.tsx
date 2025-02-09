@@ -17,7 +17,7 @@ export default function RootLayout({
 	return (
 		<html lang='en'>
 			<body
-				className={`${mona.variable} ${branch.variable} max-w-[1920px] mx-auto bg-black relative selection:bg-white selection:text-black`}
+				className={`${mona.variable} ${branch.variable} max-w-[1920px] mx-auto bg-black relative selection:bg-white selection:text-yellow-700`}
 			>
 				<QueryProvider>
 					{/* navbar */}

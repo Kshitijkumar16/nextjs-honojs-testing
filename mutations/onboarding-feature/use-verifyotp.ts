@@ -22,7 +22,7 @@ export const useVerifyOTP = () => {
 			const data = await response.json();
 
 			if (!response.ok) {
-				throw new Error("Signup failed");
+				throw new Error("OTP verification failed");
 			}
 
 			return data;

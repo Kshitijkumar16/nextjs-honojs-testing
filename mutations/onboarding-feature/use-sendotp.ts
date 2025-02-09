@@ -13,11 +13,12 @@ export const useSendOTP = () => {
 	const mutation = useMutation<ResponseType, Error, RequestType>({
 		mutationFn: async ({ json }) => {
 			const response = await client.api.auth.sendotp["$post"]({ json });
-			const data = await response.json();
 
 			if (!response.ok) {
 				throw new Error("Send-otp failed");
 			}
+
+			const data = await response.json();
 
 			return data;
 		},

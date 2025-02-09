@@ -7,13 +7,15 @@ import { sessionMiddleware } from "@/lib/session-middleware";
 import { AUTH_COOKIE } from "@/constants";
 import {
 	formSchema,
+	onboardingFormSchema,
 	sendOTPSchema,
 	verifyOTPSchema,
 } from "@/validators/login-schemas";
+import { getCurrent } from "@/app/actions";
 
 const app = new Hono()
 	.get("/currentuser", sessionMiddleware, (c) => {
-		const user = c.get("user");
+		const user = c.get("currentuser");
 		return c.json({ data: user });
 	})
 	.post("/logout", sessionMiddleware, async (c) => {
@@ -23,57 +25,62 @@ const app = new Hono()
 		await account.deleteSession("current");
 		return c.json({ success: true });
 	})
-	.post("sendotp", zValidator("json", sendOTPSchema), async (c) => {
-		const { phoneNumber } = c.req.valid("json");
+	.post(
+		"/sendotp",
+		sessionMiddleware,
+		zValidator("json", sendOTPSchema),
+		async (c) => {
+			const { phoneNumber, password } = c.req.valid("json");
 
-		const { account } = await createAdminClient();
+			const account = c.get("account");
 
-		const token = await account.createPhoneToken(ID.unique(), phoneNumber);
+			console.log("Phone:" + phoneNumber + " Password:" + password);
+			await account.updatePhone(phoneNumber, password);
 
-		console.log(token);
+			const res = await account.createPhoneVerification();
 
-		const userId = token.userId;
+			console.log("Success: \n" + res);
+			return c.json({ json: res.userId });
+		}
+	)
+	.post(
+		"/verifyotp",
+		sessionMiddleware,
+		zValidator("json", onboardingFormSchema),
+		async (c) => {
+			console.log("running api verifyotp");
+			const { userId, secret } = c.req.valid("json");
 
-		console.log("userId: " + userId);
+			const account = c.get("account");
 
-		return c.json({ userId });
-	})
-	.post("/verifyotp", zValidator("json", verifyOTPSchema), async (c) => {
-		const { userId, secret, keepSignedIn } = c.req.valid("json");
+			console.log("/verifyotp => UserId: " + userId + "Secret: " + secret);
 
-		const { account } = await createAdminClient();
+			try {
+				const res = await account.updatePhoneVerification(userId, secret);
 
-		try {
-			const session = await account.createSession(userId, secret);
+				console.log(res);
+				console.log("running - verify otp done");
 
-			console.log(session);
-
-			setCookie(c, AUTH_COOKIE, session.secret, {
-				path: "/",
-				secure: true,
-				httpOnly: true,
-				maxAge: keepSignedIn ? 60 * 60 * 24 * 365 : 60 * 60 * 24 * 30,
-				sameSite: "strict",
-			});
-		} catch (error: any) {
-			console.error("Signup error details:", {
-				message: error.message,
-				code: error.code,
-				type: error.type,
-				stack: error.stack,
-			});
-
-			return c.json(
-				{
-					error: error.message || "Failed to create account",
+				return c.json({ success: "ok" });
+			} catch (error: any) {
+				console.error("Verify otp error details:", {
+					message: error.message,
 					code: error.code,
 					type: error.type,
-				},
-				500
-			);
+					stack: error.stack,
+				});
+
+				return c.json(
+					{
+						error: error.message || "Failed to verify phone number",
+						code: error.code,
+						type: error.type,
+					},
+					500
+				);
+			}
 		}
-		return c.json({ success: "ok" });
-	})
+	)
 	.post("/signup", zValidator("json", formSchema), async (c) => {
 		try {
 			const { email, password, name } = c.req.valid("json");
