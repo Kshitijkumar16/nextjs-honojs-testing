@@ -16,6 +16,8 @@ import mg13 from "@/public/images/mg13.png";
 import mg14 from "@/public/images/mg14.png";
 import mg15 from "@/public/images/mg15.png";
 import login from "@/public/images/login.png";
+import kshitij from "@/public/images/kshitij.png";
+import dashHero from "@/public/images/dashhero.png";
 
 export default {
 	HeroImage,
@@ -33,6 +35,8 @@ export default {
 	mg12,
 	mg13,
 	mg14,
-	mg15,login,
+	mg15,
+	login,
 	Instagram,
+	kshitij, dashHero
 };
