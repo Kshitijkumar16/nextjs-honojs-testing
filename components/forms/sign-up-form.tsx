@@ -1,35 +1,55 @@
 "use client";
-
+import { Button } from "@/components/ui/button";
 import {
-	Carousel,
-	CarouselContent,
-	CarouselItem,
-	CarouselNext,
-	CarouselPrevious,
-} from "@/components/ui/carousel";
-import { images } from "@/constants";
+	Form,
+	FormControl,
+	FormField,
+	FormItem,
+	FormMessage,
+} from "@/components/ui/form";
+import React, { useState } from "react";
+import { z } from "zod";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useForm } from "react-hook-form";
+import { Input } from "@/components/ui/input";
+import { useSignup } from "@/mutations/auth-feature/use-signup";
+import { signUpformSchema } from "@/validators/auth-schemas";
+import FlipButton from "../ui/flip-button";
+
+import { cn } from "@/lib/utils";
+import { ArrowLeft, ArrowRight, Check } from "lucide-react";
 import Image from "next/image";
-
-import Autoplay from "embla-carousel-autoplay";
-import {
-	ArrowLeft,
-	ArrowRight,
-	Instagram,
-	Linkedin,
-	LinkedinIcon,
-	Twitter,
-	X,
-	Youtube,
-	YoutubeIcon,
-} from "lucide-react";
+import { carousalArray, icons, images, LOGINPAGE_URL } from "@/constants";
 import Marquee from "../ui/text-marquee";
+import { Carousel, CarouselContent, CarouselItem } from "../ui/carousel";
+import Autoplay from "embla-carousel-autoplay";
+import { Label } from "../ui/label";
+import Link from "next/link";
 
 const SignUpForm = () => {
-	const carousalArray = [images.mg1, images.mg8, images.mg5];
+	const [processing, setProcessing] = useState(false);
+
+	const signUpForm = useForm<z.infer<typeof signUpformSchema>>({
+		resolver: zodResolver(signUpformSchema),
+		defaultValues: {
+			email: "",
+			password: "",
+		},
+	});
+
+	const { mutate: callsignUpAPI } = useSignup();
+
+	const handleSubmit = async (values: z.infer<typeof signUpformSchema>) => {
+		setProcessing(true);
+		console.log(values);
+		callsignUpAPI({ json: values });
+		setProcessing(false);
+	};
 
 	return (
-		<div className='flex justify-between min-h-screen lg:gap-14'>
-			<div className='max-w-[640px] lg:flex hidden w-[40%] py lg:pl max-lg:px'>
+		<div className='flex lg:gap-[40px]'>
+			{/* left side */}
+			<div className='max-w-[640px] max-xl:hidden w-[37%] py xl:pl max-xl:px h-[100svh] sticky top-0'>
 				<div className='relative h-full w-full'>
 					<div className='absolute z-0 h-full w-full top-0 left-0 border border-white/20 rounded-[24px] overflow-hidden'>
 						<Image
@@ -42,36 +62,37 @@ const SignUpForm = () => {
 					</div>
 					<div className='relative z-10 flex flex-col justify-between h-full overflow-hidden pb-10 px-8'>
 						<div className='h-full flex flex-col justify-start items-start'>
-							<div className='overflow-hidden'>
+							<div className=''>
 								<Marquee
 									speed={0.08}
-									startTrigger={1}
-									endTrigger={2}
+									movement='-=100px'
+									startTrigger={0}
+									endTrigger={1500}
 								>
-									<p className='text-white/50 whitespace-nowrap text-[calc(8px+6dvw)] font-branch'>
+									<p className='text-white/50 whitespace-nowrap text-[calc(8px+4dvw)] font-branch'>
 										&nbsp;Modern Therapist
 									</p>
 								</Marquee>
 							</div>
 						</div>
 
-						<div className='pt-4 border-t border-t-white/30 flex justify-between items-center'>
-							<p className='text-[24px] font-mona font-light text-white/50'>
+						<div className='pt-4 flex justify-between items-center'>
+							<p className='text-[20px] font-mona font-light text-white/50'>
 								Word on the street(s)
 							</p>
 							<div className='flex gap-4'>
 								<div className='group aspect-square border border-white/30 hover:border-white p-1 rounded-full'>
-									<ArrowLeft className='text-white/50 stroke-1 group-hover:text-white' />
+									<ArrowLeft className='text-white/50 stroke-1 group-hover:text-white size-[22]' />
 								</div>
 								<div className='group aspect-square border border-white/30 hover:border-white p-1 rounded-full'>
-									<ArrowRight className='text-white/50 stroke-1 group-hover:text-white' />
+									<ArrowRight className='text-white/50 stroke-1 group-hover:text-white size-[22]' />
 								</div>
 							</div>
 						</div>
 						{/* testimonials */}
 						<Carousel
 							plugins={[Autoplay({ delay: 3000 })]}
-							className='w-full pt-14'
+							className='w-full pt-12'
 						>
 							<CarouselContent>
 								{carousalArray.map((img) => (
@@ -84,7 +105,7 @@ const SignUpForm = () => {
 												<Image
 													src={img}
 													alt=''
-													className=' aspect-square h-[100px] w-[100px] object-cover object-top border border-white/50 rounded-[12px]'
+													className=' aspect-square h-[80px] w-[80px] object-cover object-top border border-white/40 rounded-[12px]'
 												/>
 											</div>
 											<div className='mt-4'>
@@ -109,8 +130,141 @@ const SignUpForm = () => {
 					</div>
 				</div>
 			</div>
-			<div className='lg:w-[60%] w-[100%] lg:pr max-lg:px py overflo'>
-				<div className='h-full w-full'></div>
+
+			{/* form side */}
+			<div className='w-[100%] xl:pr max-xl:px py '>
+				<div className='h-full w-full md:border md:border-white/20 rounded-[24px] flex flex-col justify-center items-center py-10'>
+					<div className='min-w-[320px]'>
+						<div className='flex justify-center items-center flex-col'>
+							<p className='text-white subheading font-branch'>
+								Create an account
+							</p>
+							<div className='flex'>
+								<p className='b-text text-white/40 mt-2'>
+									Already have an account?&nbsp;
+								</p>
+								<Link href={LOGINPAGE_URL}>
+									<p className='b-text underline decoration-white/20 text-white/40 mt-2 underline-offset-4'>
+										Login
+									</p>
+								</Link>
+							</div>
+						</div>
+
+						<div className='flex md:flex-row flex-col gap-6 mt-16'>
+							<div
+								className='border border-white/20 flex items-center md:px-14
+								 py-3.5 rounded-full gap-4 justify-center'
+							>
+								<Image
+									src={icons.google}
+									alt=''
+									className='h-[20px] w-[20px] '
+								/>
+								<p className='text-white b-text'>Google</p>
+							</div>
+							<div
+								className='border border-white/20 flex items-center md:px-14
+								 py-3.5 rounded-full gap-4 justify-center'
+							>
+								<Image
+									src={icons.github}
+									alt=''
+									className='h-[20px] w-[20px] '
+								/>
+								<p className='text-white b-text'>Github</p>
+							</div>
+						</div>
+
+						<div className='my-10 flex items-center gap-6'>
+							<div className='h-[1px] bg-white/20 w-full' />
+							<div className=''>
+								<p className='text-white b-text'>Or</p>
+							</div>
+							<div className='h-[1px] bg-white/20 w-full' />
+						</div>
+						<Form {...signUpForm}>
+							<form>
+								<div className=''>
+									<FormField
+										control={signUpForm.control}
+										name='email'
+										render={({ field }) => (
+											<FormControl
+												id='email'
+												className='w-full'
+											>
+												<FormItem>
+													<Label className='label text-white/50'>
+														<p>Email</p>
+													</Label>
+													<div className='h-[1px]'></div>
+													<Input
+														onChange={field.onChange}
+														placeholder='jonsnow@nightswatch.com'
+														type='email'
+														className={cn("form-input pl-6 pr-3 mt-2.5")}
+													/>
+													<FormMessage className='font-mona font-light text-[16px] pt-1 text-red-500' />
+												</FormItem>
+											</FormControl>
+										)}
+									/>
+
+									<FormField
+										control={signUpForm.control}
+										name='password'
+										render={({ field }) => (
+											<FormControl
+												id='password'
+												className='w-full mt-6'
+											>
+												<FormItem>
+													<Label className='label text-white/50'>
+														<p>Password</p>
+													</Label>
+													<div className='h-[1px]'></div>
+													<Input
+														onChange={field.onChange}
+														placeholder='Enter your password'
+														type='password'
+														className={cn("form-input pl-6 pr-3")}
+													/>
+													<FormMessage className='font-mona font-light text-[16px] pt-1 text-red-500' />
+												</FormItem>
+											</FormControl>
+										)}
+									/>
+
+									<div className='md:mt-16 mt-12'>
+										<Button
+											type='submit'
+											onClick={(e) => {
+												signUpForm.handleSubmit(handleSubmit)();
+											}}
+											disabled={processing === true}
+											className='cursor-pointer h-[60px] block w-full p-0'
+										>
+											<FlipButton
+												title='Create account'
+												textClasses='font-branch leading-none h-[60px] text-[24px] text-black'
+												divClasses='bg-white rounded-full w-full h-[60px] flex justify-center items-center p-0'
+											/>
+										</Button>
+									</div>
+								</div>
+
+								<div className='flex justify-center mt-8'>
+									<p className='text-white/40 b-text text-[16px] max-w-[260px] text-center'>
+										By continuing, you agree to our{" "}
+										<span className='text-white'>Terms</span> and{" "}
+										<span className='text-white'>Privacy Policy</span>
+									</p>
+								</div>
+							</form>
+						</Form>
+					</div>
+				</div>
 			</div>
 		</div>
 	);

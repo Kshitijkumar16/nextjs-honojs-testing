@@ -57,3 +57,8 @@ export const GenderList: { title: string; value: string }[] = [
 	{ title: "Female", value: "female" },
 	{ title: "Other", value: "other" },
 ];
+
+export const carousalArray = [images.mg4, images.mg8, images.mg5, images.mg15];
+
+export const LOGINPAGE_URL = "/login";
+export const SIGNUPPAGE_URL = "/sign-up";

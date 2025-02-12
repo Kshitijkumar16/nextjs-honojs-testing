@@ -14,7 +14,7 @@ import { Models } from "node-appwrite";
 import React, { useEffect, useRef, useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import { Moon, Sun } from "lucide-react";
-import { useLogout } from "@/mutations/login-feature/use-logout";
+import { useLogout } from "@/mutations/auth-feature/use-logout";
 import FlipButton from "../ui/flip-button";
 
 interface DashLineProps {

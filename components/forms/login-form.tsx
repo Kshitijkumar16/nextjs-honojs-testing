@@ -1,5 +1,19 @@
 "use client";
-import { Button } from "@/components/ui/button";
+
+// global imports
+import { useState } from "react";
+
+import Link from "next/link";
+import Image from "next/image";
+
+import { z } from "zod";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useForm } from "react-hook-form";
+
+import Autoplay from "embla-carousel-autoplay";
+import { ArrowLeft, ArrowRight } from "lucide-react";
+
+// local imports
 import {
 	Form,
 	FormControl,
@@ -7,337 +21,273 @@ import {
 	FormItem,
 	FormMessage,
 } from "@/components/ui/form";
-import React, { useState } from "react";
-import { z } from "zod";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { useForm } from "react-hook-form";
-import { sendOTPSchema, verifyOTPSchema } from "@/validators/login-schemas";
-import { useSendOTP } from "@/mutations/onboarding-feature/use-sendotp";
-import { useVerifyOTP } from "@/mutations/onboarding-feature/use-verifyotp";
-
-import { isValidPhoneNumber } from "libphonenumber-js/max";
-
-import { toast } from "@/hooks/use-toast";
-
-import { PhoneInput } from "react-international-phone";
-import {
-	InputOTP,
-	InputOTPGroup,
-	InputOTPSeparator,
-	InputOTPSlot,
-} from "../ui/input-otp";
-import FlipButton from "../ui/flip-button";
+import { Carousel, CarouselContent, CarouselItem } from "../ui/carousel";
 import { Checkbox } from "../ui/checkbox";
+import { Input } from "@/components/ui/input";
+import { Label } from "../ui/label";
+import { Button } from "@/components/ui/button";
+
+import FlipButton from "../ui/flip-button";
+import Marquee from "../ui/text-marquee";
+
 import { cn } from "@/lib/utils";
-import { REGEXP_ONLY_DIGITS_AND_CHARS } from "input-otp";
-import Image from "next/image";
-import { images } from "@/constants";
-import Timer from "../ui/timer";
-import "react-international-phone/style.css";
-import { useSignup } from "@/mutations/login-feature/use-signup";
+import { carousalArray, icons, images, SIGNUPPAGE_URL } from "@/constants";
+
+import { loginFormSchema } from "@/validators/auth-schemas";
+import { useLogin } from "@/mutations/auth-feature/use-login";
 
 const LoginForm = () => {
-	const { mutate: callAPIverifyOTP } = useVerifyOTP();
-	const { mutate: callSignUP } = useSignup();
-
-	const [isOtpSent, setIsOtpSent] = useState<boolean>(false);
-	const [showResendTimer, setShowResendTimer] = useState<boolean>(false);
 	const [processing, setProcessing] = useState(false);
 
-	const phoneForm = useForm<z.infer<typeof sendOTPSchema>>({
-		resolver: zodResolver(sendOTPSchema),
+	const loginForm = useForm<z.infer<typeof loginFormSchema>>({
+		resolver: zodResolver(loginFormSchema),
 		defaultValues: {
-			phoneNumber: "",
-		},
-	});
-
-	const verificationForm = useForm<z.infer<typeof verifyOTPSchema>>({
-		resolver: zodResolver(verifyOTPSchema),
-		defaultValues: {
-			userId: "",
-			secret: "",
+			email: "",
+			password: "",
 			keepSignedIn: false,
 		},
 	});
 
-	const handleSendOTP = async (values: z.infer<typeof sendOTPSchema>) => {
-		if (!values.phoneNumber) {
-			toast({
-				title: "Error",
-				description: "Please enter a phone number",
-				variant: "destructive",
-			});
-			return;
-		}
+	const { mutate: callLoginAPI } = useLogin();
 
-		if (!isValidPhoneNumber(values.phoneNumber)) {
-			toast({
-				title: "Invalid Phone Number",
-				description:
-					"Please enter a valid phone number for the selected country",
-				variant: "destructive",
-			});
-			return;
-		}
-
-		setIsOtpSent(true);
-
-		// callAPIsendOTP({ json: values });
-	};
-
-	const handleResendComplete = () => {
-		setShowResendTimer(false);
-	};
-
-	const handleVerify = async (values: z.infer<typeof verifyOTPSchema>) => {
-		if (values.secret.length !== 6) {
-			toast({
-				title: "Invalid OTP",
-				description: "Please enter a valid OTP to continue.",
-				variant: "destructive",
-			});
-			return;
-		}
-
-		callSignUP({
-			json: {
-				name: "Jack",
-				email: "jack122344@mail.com",
-				password: "JackBodfja12345#",
-			},
-		});
+	const handleSubmit = async (values: z.infer<typeof loginFormSchema>) => {
+		setProcessing(true);
+		console.log(values);
+		callLoginAPI({ json: values });
+		setProcessing(false);
 	};
 
 	return (
-		<div className='flex w-full justify-between h-screen overflow-clip'>
-			<div className='max-w-[640px] lg:flex hidden w-[40%] relative'>
-				<div className='relative h-full w-full opacity-40'>
-					<Image
-						src={images.login}
-						alt=''
-						fill
-						className='object-cover object-top'
-					/>
-				</div>
-				<div className='absolute h-full w-full inset-0 flex justify-center items-center px'>
-					<p className='heading text-white font-branch text-center'>
-						Modern Therapist
-					</p>
+		<div className='flex lg:gap-[40px]'>
+			{/* left side */}
+			<div className='max-w-[640px] max-xl:hidden w-[37%] py xl:pl max-xl:px h-[100svh] sticky top-0'>
+				<div className='relative h-full w-full'>
+					<div className='absolute z-0 h-full w-full top-0 left-0 border border-white/20 rounded-[24px] overflow-hidden'>
+						<Image
+							src={images.mg3}
+							alt=''
+							fill
+							className='object-cover object-top'
+						/>
+						<div className='absolute h-full w-full inset-0 bg-gradient-to-b from-black/30 via-black/80 to-black' />
+					</div>
+					<div className='relative z-10 flex flex-col justify-between h-full overflow-hidden pb-10 px-8'>
+						<div className='h-full flex flex-col justify-start items-start'>
+							<div className=''>
+								<Marquee
+									speed={0.08}
+									movement='-=100px'
+									startTrigger={0}
+									endTrigger={1500}
+								>
+									<p className='text-white/50 whitespace-nowrap text-[calc(8px+4dvw)] font-branch'>
+										&nbsp;Modern Therapist
+									</p>
+								</Marquee>
+							</div>
+						</div>
+
+						<div className='pt-4 flex justify-between items-center'>
+							<p className='text-[20px] font-mona font-light text-white/50'>
+								Word on the street(s)
+							</p>
+							<div className='flex gap-4'>
+								<div className='group aspect-square border border-white/30 hover:border-white p-1 rounded-full'>
+									<ArrowLeft className='text-white/50 stroke-1 group-hover:text-white size-[22]' />
+								</div>
+								<div className='group aspect-square border border-white/30 hover:border-white p-1 rounded-full'>
+									<ArrowRight className='text-white/50 stroke-1 group-hover:text-white size-[22]' />
+								</div>
+							</div>
+						</div>
+						{/* testimonials */}
+						<Carousel
+							plugins={[Autoplay({ delay: 3000 })]}
+							className='w-full pt-12'
+						>
+							<CarouselContent>
+								{carousalArray.map((img) => (
+									<CarouselItem
+										key={img.blurDataURL}
+										className='w-full'
+									>
+										<div className='flex flex-col w-full '>
+											<div className='flex justify-between items-start '>
+												<Image
+													src={img}
+													alt=''
+													className=' aspect-square h-[80px] w-[80px] object-cover object-top border border-white/40 rounded-[12px]'
+												/>
+											</div>
+											<div className='mt-4'>
+												<p className='text-white b-text'>Neha Mehra</p>
+												<p className='text-white/40 b-text'>
+													MSc student, IIT Roorkee
+												</p>
+											</div>
+
+											<div className='mt-6'>
+												<p className='b-text max-w-[500px] text-white'>
+													"Dr. has always helped me keep my life and
+													extra-curriculars sorted so i can fully focus my
+													energies on studies and career."
+												</p>
+											</div>
+										</div>
+									</CarouselItem>
+								))}
+							</CarouselContent>
+						</Carousel>
+					</div>
 				</div>
 			</div>
-			<div className='lg:w-[60%] w-[100%] px flex flex-col justify-between'>
-				<div className='flex md:flex-row flex-col-reverse justify-between md:py max-md:pt'>
-					<p className='md:mt-0 mt-1 b-text text-center font-mona md:text-white text-white/40'>
-						Awesome! You are taking a step!
-					</p>
-					<p className='font-branch max-md:w-full text-center text-[24px] tracking-wide text-white'>
-						Modern Therapist
-					</p>
-				</div>
 
-				<div>
-					<Form {...phoneForm}>
-						<form onSubmit={phoneForm.handleSubmit(handleSendOTP)}>
-							<FormField
-								control={phoneForm.control}
-								name='phoneNumber'
-								render={({ field }) => (
-									<FormControl>
-										<FormItem>
-											<div className='flex flex-col items-center justify-center'>
-												<PhoneInput
-													value={field.value}
-													onChange={(phone) => field.onChange(phone)}
-													defaultCountry='in'
-													inputStyle={{
-														color: "white",
-														backgroundColor: "transparent",
-														height: "60px",
-														fontSize: "24px",
-														borderRadius: "999px",
-														border: "none",
-														maxWidth: "188px",
-														overflowX: "scroll",
-													}}
-													countrySelectorStyleProps={{
-														buttonStyle: {
-															backgroundColor: "transparent",
-															border: "none",
-															height: "60px",
-															borderRadius: "999px",
-															aspectRatio: "square",
-															color: "white",
-														},
-														dropdownStyleProps: {
-															listItemStyle: {
-																backgroundColor: "black",
-																color: "white",
-															},
-															listItemCountryNameStyle: {
-																backgroundColor: "black",
-																color: "white",
-																fontSize: "20px",
-															},
-															listItemDialCodeStyle: {
-																color: "rgba(255,255,255,0.5)",
-															},
-														},
-													}}
-													placeholder='Phone number'
-													className='flex justify-center items-center gap-1 font-branch bg-white/[0.08] rounded-full md:pr-6 pr-4 md:pl-10 pl-6'
-												/>
-												<div className='mt-8 h-12 flex items-center justify-center'>
-													{!isOtpSent ? (
-														<Button
-															type='button'
-															onClick={() => {
-																phoneForm.handleSubmit(handleSendOTP)();
-																setShowResendTimer(true);
-															}}
-															disabled={isOtpSent}
-															className='cursor-pointer bg-transparent'
-														>
-															<FlipButton
-																title='Send OTP'
-																divClasses='bg-transparent'
-																textClasses='subheading font-branch text-white'
-															/>
-														</Button>
-													) : showResendTimer ? (
-														<Timer
-															seconds={120}
-															onComplete={handleResendComplete}
-														/>
-													) : (
-														<Button
-															type='button'
-															onClick={() => {
-																phoneForm.handleSubmit(handleSendOTP)();
-																setShowResendTimer(true);
-															}}
-															className='cursor-pointer bg-transparent'
-														>
-															<FlipButton
-																title='Resend OTP'
-																divClasses='bg-transparent'
-																textClasses='subheading font-branch text-white'
-															/>
-														</Button>
-													)}
-												</div>
-											</div>
-										</FormItem>
-									</FormControl>
-								)}
-							/>
-						</form>
-					</Form>
-				</div>
+			{/* form side */}
+			<div className='w-[100%] xl:pr max-xl:px py '>
+				<div className='h-full w-full md:border md:border-white/20 rounded-[24px] flex flex-col justify-center items-center py-10'>
+					<div className='min-w-[320px]'>
+						<div className='flex justify-center items-center flex-col'>
+							<p className='text-white subheading font-branch'>Log in</p>
+							<div className='flex'>
+								<p className='b-text text-white/40 mt-2'>
+									Don't have an account?&nbsp;
+								</p>
+								<Link href={SIGNUPPAGE_URL}>
+									<p className='b-text underline decoration-white/20 text-white/40 mt-2 underline-offset-4'>
+										Create a new one
+									</p>
+								</Link>
+							</div>
+						</div>
 
-				<div>
-					<Form {...verificationForm}>
-						<form>
-							<FormField
-								control={verificationForm.control}
-								name='secret'	
-								render={({ field }) => (
-									<FormControl>
-										<FormItem className=''>
-											<div className='flex flex-col justify-center items-center'>
-												<div>
-													<InputOTP
-														maxLength={6}
-														value={field.value}
+						<div className='flex md:flex-row flex-col gap-6 mt-16'>
+							<div
+								className='border border-white/20 flex items-center md:px-14
+								 py-3.5 rounded-full gap-4 justify-center'
+							>
+								<Image
+									src={icons.google}
+									alt=''
+									className='h-[20px] w-[20px] '
+								/>
+								<p className='text-white b-text'>Google</p>
+							</div>
+							<div
+								className='border border-white/20 flex items-center md:px-14
+								 py-3.5 rounded-full gap-4 justify-center'
+							>
+								<Image
+									src={icons.github}
+									alt=''
+									className='h-[20px] w-[20px] '
+								/>
+								<p className='text-white b-text'>Github</p>
+							</div>
+						</div>
+
+						<div className='my-10 flex items-center gap-6'>
+							<div className='h-[1px] bg-white/20 w-full' />
+							<div className=''>
+								<p className='text-white b-text'>Or</p>
+							</div>
+							<div className='h-[1px] bg-white/20 w-full' />
+						</div>
+						<Form {...loginForm}>
+							<form>
+								<div className=''>
+									<FormField
+										control={loginForm.control}
+										name='email'
+										render={({ field }) => (
+											<FormControl
+												id='firstName'
+												className='w-full'
+											>
+												<FormItem>
+													<Label className='label text-white/50'>
+														<p>Email</p>
+													</Label>
+													<div className='h-[1px]'></div>
+													<Input
 														onChange={field.onChange}
-														// onComplete={() => form.handleSubmit(onSubmit)()}
-														pattern={REGEXP_ONLY_DIGITS_AND_CHARS}
-													>
-														<InputOTPGroup className='gap-1'>
-															<InputOTPSlot
-																index={0}
-																className='text-white border-none bg-white/10 h-[60px] w-[40px] font-branch text-[24px]'
-															/>
-															<InputOTPSlot
-																index={1}
-																className='text-white border-none bg-white/10 h-[60px] w-[40px] font-branch text-[24px]'
-															/>
-															<InputOTPSlot
-																index={2}
-																className='text-white border-none bg-white/10 h-[60px] w-[40px] font-branch text-[24px]'
-															/>
-														</InputOTPGroup>
-														<InputOTPSeparator className='text-white' />
-														<InputOTPGroup className='gap-1'>
-															<InputOTPSlot
-																index={3}
-																className='text-white border-none bg-white/10 h-[60px] w-[40px] font-branch text-[24px]'
-															/>
-															<InputOTPSlot
-																index={4}
-																className='text-white border-none bg-white/10 h-[60px] w-[40px] font-branch text-[24px]'
-															/>
-															<InputOTPSlot
-																index={5}
-																className='text-white border-none bg-white/10 h-[60px] w-[40px] font-branch text-[24px]'
-															/>
-														</InputOTPGroup>
-													</InputOTP>
-												</div>
-												<FormMessage className='text-[16px] tracking-wide font-mona mt-4 text-red-500 font-light' />
+														placeholder='jonsnow@nightswatch.com'
+														type='email'
+														className={cn("form-input pl-6 pr-3 mt-2.5")}
+													/>
+													<FormMessage className='font-mona font-light text-[16px] pt-1 text-red-500' />
+												</FormItem>
+											</FormControl>
+										)}
+									/>
 
-												<div className='flex flex-col items-center justify-center mt-24'>
-													<Button
-														type='submit'
-														onClick={() => {
-															verificationForm.handleSubmit(handleVerify)();
-														}}
-														disabled={isOtpSent === false}
-														className='cursor-pointer bg-transparent'
-													>
-														<FlipButton
-															title='Verify & Continue'
-															divClasses={cn(
-																"bg-white rounded-full",
-																isOtpSent && "shadow-whiteGlow"
-															)}
-															textClasses='subheading font-branch text-black lg:px-14 px-10 py-3'
+									<FormField
+										control={loginForm.control}
+										name='password'
+										render={({ field }) => (
+											<FormControl
+												id='firstName'
+												className='w-full mt-6'
+											>
+												<FormItem>
+													<Label className='label text-white/50'>
+														<p>Password</p>
+													</Label>
+													<div className='h-[1px]'></div>
+													<Input
+														onChange={field.onChange}
+														placeholder='Enter your password'
+														type={"text"}
+														className={cn("form-input pl-6 pr-3")}
+													/>
+													<FormMessage className='font-mona font-light text-[16px] pt-1 text-red-500' />
+												</FormItem>
+											</FormControl>
+										)}
+									/>
+
+									<div className='md:mt-16 mt-12'>
+										<Button
+											type='submit'
+											onClick={(e) => {
+												e.preventDefault();
+												loginForm.handleSubmit(handleSubmit)();
+											}}
+											disabled={processing === true}
+											className='cursor-pointer h-[60px] block w-full p-0'
+										>
+											<FlipButton
+												title='Login'
+												textClasses='font-branch leading-none h-[60px] text-[24px] text-black'
+												divClasses='bg-white rounded-full w-full h-[60px] flex justify-center items-center p-0'
+											/>
+										</Button>
+									</div>
+								</div>
+
+								<div className='flex justify-center mt-6'>
+									<FormField
+										control={loginForm.control}
+										name='keepSignedIn'
+										render={({ field }) => (
+											<FormControl className=''>
+												<FormItem>
+													<div className='flex justify-center items-center gap-4'>
+														<Checkbox
+															checked={field.value}
+															onCheckedChange={field.onChange}
+															className='border rounded-[4px] border-white'
 														/>
-													</Button>
-												</div>
-											</div>
-										</FormItem>
-									</FormControl>
-								)}
-							/>
-
-							<FormField
-								control={verificationForm.control}
-								name='keepSignedIn'
-								render={({ field }) => (
-									<FormControl className='mt-10'>
-										<FormItem>
-											<div className='flex justify-center items-center gap-4'>
-												<Checkbox
-													checked={field.value}
-													onCheckedChange={field.onChange}
-													className='border-white'
-												/>
-												<p className='b-text text-white'>Keep me signed-in</p>
-											</div>
-										</FormItem>
-									</FormControl>
-								)}
-							/>
-						</form>
-					</Form>
-				</div>
-				<div>
-					<div className='flex justify-center pb-10'>
-						<p className='text-white/40 b-text text-[16px] max-w-[260px] text-center'>
-							By continuing, you agree to our{" "}
-							<span className='text-white'>Terms</span> and{" "}
-							<span className='text-white'>Privacy Policy</span>
-						</p>
+														<p className='b-text text-white'>
+															Keep me signed-in
+														</p>
+													</div>
+												</FormItem>
+											</FormControl>
+										)}
+									/>
+								</div>
+							</form>
+						</Form>
 					</div>
 				</div>
 			</div>

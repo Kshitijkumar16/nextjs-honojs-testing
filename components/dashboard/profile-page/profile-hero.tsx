@@ -1,13 +1,11 @@
 "use client";
 import React from "react";
 import { Button } from "../../ui/button";
-import { useLogout } from "@/mutations/login-feature/use-logout";
+import { useLogout } from "@/mutations/auth-feature/use-logout";
 import Image from "next/image";
 import { images } from "@/constants";
 
 const ProfileHero = () => {
-
-
 	return (
 		<div className='flex flex-col justify-center items-center mt-8'>
 			<div>
@@ -36,8 +34,6 @@ const ProfileHero = () => {
 					</p>
 				</Button>
 			</div>
-
-			
 		</div>
 	);
 };

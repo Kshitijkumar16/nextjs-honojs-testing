@@ -6,17 +6,97 @@ import { deleteCookie, setCookie } from "hono/cookie";
 import { sessionMiddleware } from "@/lib/session-middleware";
 import { AUTH_COOKIE } from "@/constants";
 import {
-	formSchema,
+	signUpformSchema,
 	onboardingFormSchema,
 	sendOTPSchema,
 	verifyOTPSchema,
-} from "@/validators/login-schemas";
+	loginFormSchema,
+} from "@/validators/auth-schemas";
 import { getCurrent } from "@/app/actions";
 
 const app = new Hono()
 	.get("/currentuser", sessionMiddleware, (c) => {
 		const user = c.get("currentuser");
 		return c.json({ data: user });
+	})
+	.post("login", zValidator("json", loginFormSchema), async (c) => {
+		try {
+			const { email, password, keepSignedIn } = c.req.valid("json");
+
+			const { account } = await createAdminClient();
+
+			// Create email session directly
+			const session = await account.createEmailPasswordSession(email, password);
+			console.log("Session created successfully");
+
+			setCookie(c, AUTH_COOKIE, session.secret, {
+				path: "/",
+				secure: true,
+				httpOnly: true,
+				maxAge: keepSignedIn ? 60 * 60 * 24 * 365 : 60 * 60 * 24 * 30,
+				sameSite: "strict",
+			});
+
+			return c.json({ success: "ok" });
+		} catch (error: any) {
+			console.error("Signup error details:", {
+				message: error.message,
+				code: error.code,
+				type: error.type,
+				stack: error.stack,
+			});
+
+			return c.json(
+				{
+					error: error.message || "Failed to create account",
+					code: error.code,
+					type: error.type,
+				},
+				500
+			);
+		}
+	})
+	.post("/signup", zValidator("json", signUpformSchema), async (c) => {
+		try {
+			const { email, password } = c.req.valid("json");
+			console.log("Received signup request for:", { email });
+
+			const { account } = await createAdminClient();
+			console.log("Admin client created successfully");
+
+			const user = await account.create(ID.unique(), email, password);
+			console.log("User created successfully:", user.$id);
+
+			// Create email session directly
+			const session = await account.createEmailPasswordSession(email, password);
+			console.log("Session created successfully");
+
+			setCookie(c, AUTH_COOKIE, session.secret, {
+				path: "/",
+				secure: true,
+				httpOnly: true,
+				maxAge: 60 * 60 * 24 * 30,
+				sameSite: "strict",
+			});
+
+			return c.json({ success: "ok" });
+		} catch (error: any) {
+			console.error("Signup error details:", {
+				message: error.message,
+				code: error.code,
+				type: error.type,
+				stack: error.stack,
+			});
+
+			return c.json(
+				{
+					error: error.message || "Failed to create account",
+					code: error.code,
+					type: error.type,
+				},
+				500
+			);
+		}
 	})
 	.post("/logout", sessionMiddleware, async (c) => {
 		const account = c.get("account");
@@ -80,48 +160,6 @@ const app = new Hono()
 				);
 			}
 		}
-	)
-	.post("/signup", zValidator("json", formSchema), async (c) => {
-		try {
-			const { email, password, name } = c.req.valid("json");
-			console.log("Received signup request for:", { email, name });
-
-			const { account } = await createAdminClient();
-			console.log("Admin client created successfully");
-
-			const user = await account.create(ID.unique(), email, password, name);
-			console.log("User created successfully:", user.$id);
-
-			// Create email session directly
-			const session = await account.createEmailPasswordSession(email, password);
-			console.log("Session created successfully");
-
-			setCookie(c, AUTH_COOKIE, session.secret, {
-				path: "/",
-				secure: true,
-				httpOnly: true,
-				maxAge: 60 * 60 * 24 * 30,
-				sameSite: "strict",
-			});
-
-			return c.json({ success: "ok" });
-		} catch (error: any) {
-			console.error("Signup error details:", {
-				message: error.message,
-				code: error.code,
-				type: error.type,
-				stack: error.stack,
-			});
-
-			return c.json(
-				{
-					error: error.message || "Failed to create account",
-					code: error.code,
-					type: error.type,
-				},
-				500
-			);
-		}
-	});
+	);
 
 export default app;

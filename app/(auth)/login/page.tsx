@@ -1,8 +1,7 @@
-import LoginForm from "@/components/forms/login-form";
 import React from "react";
 import { redirect } from "next/navigation";
 import { getCurrent } from "@/app/actions";
-import DemoLogin from "@/components/forms/demo-login";
+import LoginForm from "@/components/forms/login-form";
 
 const BasePage = async () => {
 	const user = await getCurrent();
@@ -14,8 +13,7 @@ const BasePage = async () => {
 
 	return (
 		<div>
-			{/* <LoginForm /> */}
-			<DemoLogin />
+			<LoginForm />
 		</div>
 	);
 };

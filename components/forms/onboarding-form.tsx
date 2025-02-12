@@ -41,8 +41,6 @@ import {
 	Carousel,
 	CarouselContent,
 	CarouselItem,
-	CarouselNext,
-	CarouselPrevious,
 } from "@/components/ui/carousel";
 import { Input } from "../ui/input";
 import { Textarea } from "../ui/textarea";
@@ -69,14 +67,12 @@ import Marquee from "../ui/text-marquee";
 import { REGEXP_ONLY_DIGITS } from "input-otp";
 import "react-international-phone/style.css";
 import { cn } from "@/lib/utils";
-import { GenderList, images } from "@/constants";
-import { onboardingFormSchema } from "@/validators/login-schemas";
+import { carousalArray, GenderList, images } from "@/constants";
+import { onboardingFormSchema } from "@/validators/auth-schemas";
 import { useSendOTP } from "@/mutations/onboarding-feature/use-sendotp";
 import { useVerifyOTP } from "@/mutations/onboarding-feature/use-verifyotp";
 
 const OnboardingForm = () => {
-	const carousalArray = [images.mg4, images.mg8, images.mg5, images.mg15];
-
 	const [isOtpSent, setIsOtpSent] = useState<boolean>(false);
 	const [showResendTimer, setShowResendTimer] = useState<boolean>(false);
 	const [otpFilled, setOTPFilled] = useState<boolean>(false);
