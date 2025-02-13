@@ -2,7 +2,7 @@ import images from "./images";
 
 export const DASHBOARDPAGE_URL = "/dashboard";
 export const PROFILEPAGE_URL = "/profile";
-export const ADDPAGE_URL = "/add";
+export const CREATEPAGE_URL = "/create";
 
 export const DashboardTabs: { title: string; value: DashActiveTab }[] = [
 	{ title: "Mantra", value: "mantra" },

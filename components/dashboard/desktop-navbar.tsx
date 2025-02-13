@@ -2,7 +2,7 @@
 
 import { icons, images } from "@/constants";
 import {
-	ADDPAGE_URL,
+	CREATEPAGE_URL,
 	DASHBOARDPAGE_URL,
 	PROFILEPAGE_URL,
 } from "@/constants/dashboard-index";
@@ -93,7 +93,7 @@ const DesktopNavbar = ({ data }: DashLineProps) => {
 							className={cn(
 								"b-text hover:text-white",
 								"transition-colors duration-300 ease-in-out",
-								pathName === ADDPAGE_URL ? "text-white" : "text-white/50"
+								pathName === CREATEPAGE_URL ? "text-white" : "text-white/50"
 							)}
 						>
 							Create

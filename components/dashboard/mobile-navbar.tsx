@@ -1,7 +1,7 @@
 "use client";
 import { icons, images } from "@/constants";
 import {
-	ADDPAGE_URL,
+	CREATEPAGE_URL,
 	DASHBOARDPAGE_URL,
 	PROFILEPAGE_URL,
 } from "@/constants/dashboard-index";
@@ -46,10 +46,10 @@ const MobileNavbar = () => {
 					<div className='h-[52px] w-[52px] flex items-center justify-center'>
 						<Link href={"/add"}>
 							<Image
-								src={pathName !== ADDPAGE_URL ? icons.add : icons.addFilled}
+								src={pathName !== CREATEPAGE_URL ? icons.add : icons.addFilled}
 								alt=''
 								className={cn(
-									pathName !== ADDPAGE_URL
+									pathName !== CREATEPAGE_URL
 										? "h-[36px] w-[36px]"
 										: "h-[40px] w-[40px]"
 								)}
