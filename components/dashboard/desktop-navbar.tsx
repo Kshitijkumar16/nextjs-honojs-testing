@@ -71,7 +71,7 @@ const DesktopNavbar = ({ data }: DashLineProps) => {
 
 				<div className='md:flex gap-10 items-center hidden'>
 					<Link
-						href={"/dashboard"}
+						href={DASHBOARDPAGE_URL}
 						className='block'
 					>
 						<p
@@ -86,7 +86,7 @@ const DesktopNavbar = ({ data }: DashLineProps) => {
 					</Link>
 
 					<Link
-						href={"/add"}
+						href={CREATEPAGE_URL}
 						className='block'
 					>
 						<p
@@ -104,7 +104,7 @@ const DesktopNavbar = ({ data }: DashLineProps) => {
 
 			<div className='flex items-center gap-7'>
 				<Link
-					href={"/profile"}
+					href={PROFILEPAGE_URL}
 					className='block group'
 				>
 					<div className='flex items-center gap-5'>
