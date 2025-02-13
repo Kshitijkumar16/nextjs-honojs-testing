@@ -63,41 +63,43 @@ const DesktopNavbar = ({ data }: DashLineProps) => {
 	};
 
 	return (
-		<div className='px py-[24px] flex justify-between items-center rounded-full '>
+		<div className='px py-[24px] flex justify-between items-center rounded-full bg-black'>
 			<div className='flex items-center gap-10'>
 				<p className='text-white font-branch text-[20px] tracking-wider'>
 					Modern Therapy
 				</p>
 
-				<Link
-					href={"/dashboard"}
-					className='block'
-				>
-					<p
-						className={cn(
-							"b-text hover:text-white",
-							"transition-colors duration-300 ease-in-out",
-							pathName === DASHBOARDPAGE_URL ? "text-white" : "text-white/50"
-						)}
+				<div className='md:flex gap-10 items-center hidden'>
+					<Link
+						href={"/dashboard"}
+						className='block'
 					>
-						Dashboard
-					</p>
-				</Link>
+						<p
+							className={cn(
+								"b-text hover:text-white",
+								"transition-colors duration-300 ease-in-out",
+								pathName === DASHBOARDPAGE_URL ? "text-white" : "text-white/50"
+							)}
+						>
+							Dashboard
+						</p>
+					</Link>
 
-				<Link
-					href={"/add"}
-					className='block'
-				>
-					<p
-						className={cn(
-							"b-text hover:text-white",
-							"transition-colors duration-300 ease-in-out",
-							pathName === ADDPAGE_URL ? "text-white" : "text-white/50"
-						)}
+					<Link
+						href={"/add"}
+						className='block'
 					>
-						Create
-					</p>
-				</Link>
+						<p
+							className={cn(
+								"b-text hover:text-white",
+								"transition-colors duration-300 ease-in-out",
+								pathName === ADDPAGE_URL ? "text-white" : "text-white/50"
+							)}
+						>
+							Create
+						</p>
+					</Link>
+				</div>
 			</div>
 
 			<div className='flex items-center gap-7'>
