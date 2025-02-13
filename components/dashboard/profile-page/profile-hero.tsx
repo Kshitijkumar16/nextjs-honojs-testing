@@ -18,7 +18,7 @@ const ProfileHero = () => {
 
 			<div className='flex flex-col justify-center items-center'>
 				<p className='text-white font-branch subheading tracking-wider mt-4'>
-					Kshitijkumar
+					Kshitijkumar Pantawane
 				</p>
 				<div className='flex justify-center items-center gap-2 mt-1'>
 					<p className='text-white/50 b-text'>Path of growth</p>

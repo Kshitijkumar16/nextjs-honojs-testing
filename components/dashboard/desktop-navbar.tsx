@@ -102,36 +102,38 @@ const DesktopNavbar = ({ data }: DashLineProps) => {
 				</div>
 			</div>
 
-			<div className='flex items-center gap-7'>
-				<Link
-					href={PROFILEPAGE_URL}
-					className='block group'
-				>
-					<div className='flex items-center gap-5'>
-						<p
-							className={cn(
-								"b-text group-hover:text-white",
-								"transition-colors duration-300 ease-in-out",
-								pathName === PROFILEPAGE_URL ? "text-white" : "text-white/50"
-							)}
-						>
-							Profile
-						</p>
-						<div className='flex justify-center items-center h-[36px] w-[36px] max-md:hidden'>
-							<Image
-								src={images.kshitij}
-								alt=''
+			<div className='flex items-center gap-10'>
+				<div className='max-md:hidden'>
+					<Link
+						href={PROFILEPAGE_URL}
+						className='block group'
+					>
+						<div className='flex items-center gap-4'>
+							<p
 								className={cn(
-									"rounded-full object-cover object-center border-2",
+									"b-text group-hover:text-white",
 									"transition-colors duration-300 ease-in-out",
-									pathName === PROFILEPAGE_URL
-										? "border-white h-[32px] w-[32px]"
-										: "border-transparent group-hover:border-white h-[32px] w-[32px]"
+									pathName === PROFILEPAGE_URL ? "text-white" : "text-white/50"
 								)}
-							/>
+							>
+								Profile
+							</p>
+							<div className='flex justify-center items-center h-[36px] w-[36px]'>
+								<Image
+									src={images.kshitij}
+									alt=''
+									className={cn(
+										"rounded-full object-cover object-center border-2",
+										"transition-colors duration-300 ease-in-out",
+										pathName === PROFILEPAGE_URL
+											? "border-white h-[32px] w-[32px]"
+											: "border-transparent group-hover:border-white h-[32px] w-[32px]"
+									)}
+								/>
+							</div>
 						</div>
-					</div>
-				</Link>
+					</Link>
+				</div>
 				{/* drop down logic */}
 				<div className='relative'>
 					<button
