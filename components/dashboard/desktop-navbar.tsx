@@ -123,9 +123,10 @@ const DesktopNavbar = ({ data }: DashLineProps) => {
 								alt=''
 								className={cn(
 									"rounded-full object-cover object-center border-2",
+									"transition-colors duration-300 ease-in-out",
 									pathName === PROFILEPAGE_URL
 										? "border-white h-[32px] w-[32px]"
-										: "border-transparent h-[32px] w-[32px]"
+										: "border-transparent group-hover:border-white h-[32px] w-[32px]"
 								)}
 							/>
 						</div>
