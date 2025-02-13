@@ -21,7 +21,7 @@ const ProfileFiller = () => {
 		<div className='mt-20 '>
 			{/* filter 1 */}
 			<div className='h-full'>
-				<div className='flex lg:gap-16 gap-4 px overflow-x-scroll sticky top-[84px] bg-black z-40 pb-6 pt-2'>
+				<div className='flex lg:gap-16 gap-4 px overflow-x-scroll sticky top-[84px] bg-black z-40 pt-2 pb-6'>
 					{ProfilePersonalFilters.map((filter) => (
 						<div
 							key={filter}
@@ -63,7 +63,7 @@ const ProfileFiller = () => {
 					))}
 				</div>
 				{/* content 1 */}
-				<div className='md:mt-16 mt-6'>
+				<div className=' mt-6'>
 					<div className='px space-y-10'>
 						{ProfileFillerData.map((data, index) => (
 							<div

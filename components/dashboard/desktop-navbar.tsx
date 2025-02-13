@@ -103,24 +103,34 @@ const DesktopNavbar = ({ data }: DashLineProps) => {
 			</div>
 
 			<div className='flex items-center gap-7'>
-				<div className='flex justify-center items-center h-[36px] w-[36px] max-md:hidden'>
-					<Link
-						href={"/profile"}
-						className='block'
-					>
-						<Image
-							src={images.kshitij}
-							alt=''
+				<Link
+					href={"/profile"}
+					className='block group'
+				>
+					<div className='flex items-center gap-5'>
+						<p
 							className={cn(
-								"rounded-full object-cover object-center border-2",
-								pathName === PROFILEPAGE_URL
-									? "border-white h-[32px] w-[32px]"
-									: "border-transparent h-[32px] w-[32px]"
+								"b-text group-hover:text-white",
+								"transition-colors duration-300 ease-in-out",
+								pathName === PROFILEPAGE_URL ? "text-white" : "text-white/50"
 							)}
-						/>
-					</Link>
-				</div>
-
+						>
+							Profile
+						</p>
+						<div className='flex justify-center items-center h-[36px] w-[36px] max-md:hidden'>
+							<Image
+								src={images.kshitij}
+								alt=''
+								className={cn(
+									"rounded-full object-cover object-center border-2",
+									pathName === PROFILEPAGE_URL
+										? "border-white h-[32px] w-[32px]"
+										: "border-transparent h-[32px] w-[32px]"
+								)}
+							/>
+						</div>
+					</div>
+				</Link>
 				{/* drop down logic */}
 				<div className='relative'>
 					<button
