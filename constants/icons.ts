@@ -5,5 +5,15 @@ import homeFilled from "@/public/icons/home-filled.svg";
 import add from "@/public/icons/add.svg";
 import addFilled from "@/public/icons/addFilled.svg";
 import github from "@/public/icons/github-mark-white.svg";
+import blueTick from "@/public/icons/bluetick.svg";
 
-export default { google, instagram, home, homeFilled, add, addFilled, github };
+export default {
+	google,
+	instagram,
+	home,
+	homeFilled,
+	add,
+	addFilled,
+	github,
+	blueTick,
+};

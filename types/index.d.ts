@@ -8,6 +8,4 @@ declare type ProfilePersonalFilter =
 	| "Memories made"
 	| "The journey";
 
-declare type ProfileDataFilters =
-	| "Appointment history"
-	| "Token purchase history";
+declare type ProfileDataFilters = "Appointments" | "Purchases";

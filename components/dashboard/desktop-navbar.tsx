@@ -63,7 +63,7 @@ const DesktopNavbar = ({ data }: DashLineProps) => {
 	};
 
 	return (
-		<div className='px py-[24px] flex justify-between items-center rounded-full bg-black'>
+		<div className='px py-[24px] flex justify-between items-center bg-black'>
 			<div className='flex items-center gap-10'>
 				<p className='text-white font-branch text-[20px] tracking-wider'>
 					Modern Therapy
@@ -106,7 +106,13 @@ const DesktopNavbar = ({ data }: DashLineProps) => {
 				<div className='max-md:hidden'>
 					<Link
 						href={PROFILEPAGE_URL}
-						className='block group'
+						className={cn(
+							"block group py-1 pr-1 pl-4 rounded-full",
+							"transition-colors border duration-500 ease-in-out",
+							pathName === PROFILEPAGE_URL
+								? "border-white/20"
+								: "border-transprent"
+						)}
 					>
 						<div className='flex items-center gap-4'>
 							<p
@@ -142,8 +148,11 @@ const DesktopNavbar = ({ data }: DashLineProps) => {
 							setDropDownOpen((prev) => (prev = !prev));
 						}}
 						className={cn(
-							"block px-3 py-3 hover:bg-zinc-800 rounded-[12px]",
-							"transition-colors duration-200 ease-in-out "
+							"block px-3 py-3 border rounded-[12px]",
+							"transition-colors duration-200 ease-in-out",
+							dropDownOpen
+								? "border-white/20"
+								: "border-transparent hover:border-white/20"
 						)}
 					>
 						<div className={cn("flex flex-col gap-2.5 ")}>
@@ -173,9 +182,9 @@ const DesktopNavbar = ({ data }: DashLineProps) => {
 									transition: { duration: 0.2, ease: "easeIn" },
 								}}
 								ref={dropdownRef}
-								className='absolute origin-top-right right-0 top-[60px] w-[280px] bg-zinc-900 rounded-[24px] z-50 p-2 overflow-hidden'
+								className='absolute origin-top-right right-0 top-[60px] w-[280px] bg-black border border-white/20 rounded-[24px] z-50 p-2 overflow-hidden'
 							>
-								<div className='pt-8 pb-6 rounded-[16px] bg-zinc-950'>
+								<div className='pt-8 pb-6 bg-black mx-5 border-b border-b-white/20'>
 									<div className='flex flex-col justify-center items-center'>
 										<Image
 											src={images.kshitij}
@@ -187,7 +196,7 @@ const DesktopNavbar = ({ data }: DashLineProps) => {
 										</p>
 									</div>
 								</div>
-								<div className='mt-2 py-3 px-5 flex flex-col rounded-[16px] bg-zinc-950'>
+								<div className='mt-2 py-3 px-5 flex flex-col rounded-[16px] bg-black'>
 									<div>
 										<button className='block w-full'>
 											<p
@@ -276,7 +285,7 @@ const DesktopNavbar = ({ data }: DashLineProps) => {
 									</div>
 								</div>
 
-								<div className='mt-2 py-2 px-5 flex flex-col gap-4 rounded-[16px] bg-zinc-950'>
+								<div className='mt-2 pt-4 py-2 mx-5 border-t border-t-white/20 flex flex-col gap-4 rounded-none bg-black'>
 									<div className='flex justify-between items-center'>
 										<p className='b-text text-white'>Theme</p>
 										<div className='flex gap-1 border border-white/20 rounded-full'>

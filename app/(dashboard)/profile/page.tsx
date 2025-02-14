@@ -1,9 +1,9 @@
 import { getCurrent } from "@/app/actions";
-import ProfileFiller from "@/components/dashboard/profile-page/profile-filler";
+import ProfileHistory from "@/components/dashboard/profile-page/profile-history";
 import ProfileHero from "@/components/dashboard/profile-page/profile-hero";
-import { images } from "@/constants";
-import Image from "next/image";
+import ProfileStats from "@/components/dashboard/profile-page/profile-stats";
 import { redirect } from "next/navigation";
+import ProfileJourney from "@/components/dashboard/profile-page/profile-journey";
 
 const ProfilePage = async () => {
 	const user = await getCurrent();
@@ -12,9 +12,26 @@ const ProfilePage = async () => {
 	if (user.phoneVerification === false) redirect("/onboarding");
 
 	return (
-		<div className='min-h-screen'>
-			<ProfileHero />
-			<ProfileFiller />
+		<div className='min-h-screen px space-y-[40px]'>
+			{/* top */}
+			<div className='flex xl:flex-row flex-col gap-[40px]'>
+				<div className='sm:min-w-[520px] h-full max-mob:w-[100%]'>
+					<ProfileHero />
+				</div>
+				<div className='w-full'>
+					<ProfileStats />
+				</div>
+			</div>
+
+			{/* bottom */}
+			<div className='flex xl:flex-row flex-col gap-[40px]'>
+				<div className='w-full'>
+					<ProfileJourney />
+				</div>
+				<div className='max-w-[560px] w-full'>
+					<ProfileHistory />
+				</div>
+			</div>
 		</div>
 	);
 };

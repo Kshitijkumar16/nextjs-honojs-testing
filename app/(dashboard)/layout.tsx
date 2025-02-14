@@ -17,7 +17,7 @@ const DashboardLayout = async ({ children }: { children: React.ReactNode }) => {
 					<div className='fixed z-50 w-full top-0 left-0'>
 						<DesktopNavbar data={user} />
 					</div>
-					<div className='h-[84px] pointer-events-none'></div>
+					<div className='h-[100px] pointer-events-none'></div>
 					{children}
 				</div>
 				<div className='fixed z-10 bottom-0 left-1/2 -translate-x-1/2'>

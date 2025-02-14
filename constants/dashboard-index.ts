@@ -14,12 +14,11 @@ export const ProfilePersonalFilters: ProfilePersonalFilter[] = [
 	"Your mantras",
 	"Your learnings",
 	"Memories made",
-	"The journey",
 ];
 
 export const ProfileDataFilters: ProfileDataFilters[] = [
-	"Appointment history",
-	"Token purchase history",
+	"Appointments",
+	"Purchases",
 ];
 
 export const ProfileFillerData = [
