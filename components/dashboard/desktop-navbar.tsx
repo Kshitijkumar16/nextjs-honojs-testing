@@ -63,7 +63,7 @@ const DesktopNavbar = ({ data }: DashLineProps) => {
 	};
 
 	return (
-		<div className='px py-[24px] flex justify-between items-center bg-black'>
+		<div className='px py-[24px] flex justify-between items-center bg-black '>
 			<div className='flex items-center gap-10'>
 				<p className='text-white font-branch text-[20px] tracking-wider'>
 					Modern Therapy
@@ -111,7 +111,7 @@ const DesktopNavbar = ({ data }: DashLineProps) => {
 							"transition-colors border duration-500 ease-in-out",
 							pathName === PROFILEPAGE_URL
 								? "border-white/20"
-								: "border-transprent"
+								: "border-transparent"
 						)}
 					>
 						<div className='flex items-center gap-4'>

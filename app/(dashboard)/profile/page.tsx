@@ -12,7 +12,7 @@ const ProfilePage = async () => {
 	if (user.phoneVerification === false) redirect("/onboarding");
 
 	return (
-		<div className='min-h-screen px space-y-[40px]'>
+		<div className='min-h-screen px pt-[8px] pb-[40px] space-y-[40px]'>
 			{/* top */}
 			<div className='flex xl:flex-row flex-col gap-[40px]'>
 				<div className='sm:min-w-[520px] h-full max-mob:w-[100%]'>

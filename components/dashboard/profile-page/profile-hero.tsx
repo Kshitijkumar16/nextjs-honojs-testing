@@ -41,7 +41,7 @@ const ProfileHero = () => {
 								className=''
 							/>
 						</div>
-						<div className='mt-1'>
+						<div className=''>
 							<p className='text-white/50 b-text'>kshitijkumar1610@gmail.com</p>
 						</div>
 					</div>

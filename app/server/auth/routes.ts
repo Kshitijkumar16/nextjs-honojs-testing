@@ -160,6 +160,7 @@ const app = new Hono()
 				);
 			}
 		}
-	);
+	)
+	.post("/cleanauth", async (c) => {});
 
 export default app;
