@@ -1,9 +1,11 @@
 import { getCurrent } from "@/app/actions";
-import ProfileHistory from "@/components/dashboard/profile-page/profile-history";
+import ProfileHistory from "@/components/dashboard/profile-page/purchase-history";
 import ProfileHero from "@/components/dashboard/profile-page/profile-hero";
-import ProfileStats from "@/components/dashboard/profile-page/profile-stats";
+import ProfileStats from "@/components/dashboard/profile-page/appointments-history";
 import { redirect } from "next/navigation";
 import ProfileJourney from "@/components/dashboard/profile-page/profile-journey";
+import { cn } from "@/lib/utils";
+import AppointmentsHistory from "@/components/dashboard/profile-page/appointments-history";
 
 const ProfilePage = async () => {
 	const user = await getCurrent();
@@ -12,23 +14,24 @@ const ProfilePage = async () => {
 	if (user.phoneVerification === false) redirect("/onboarding");
 
 	return (
-		<div className='min-h-screen px pt-[8px] pb-[40px] space-y-[40px]'>
-			{/* top */}
-			<div className='flex xl:flex-row flex-col gap-[40px]'>
-				<div className='sm:min-w-[520px] h-full max-mob:w-[100%]'>
-					<ProfileHero />
-				</div>
-				<div className='w-full'>
-					<ProfileStats />
-				</div>
+		<div className='min-h-screen px flex lg:flex-row flex-col justify-between lg:space-x-[40px]'>
+			{/* sidebar */}
+			<div
+				className={cn(
+					"w-full rounded-[24px] border border-white/20",
+					"lg:sticky lg:top-[98px] lg:max-w-[400px] lg:max-h-[calc(100svh-128px)] lg:overflow-y-scroll",
+					"lg:px-9 md:px-6 px-5"
+				)}
+			>
+				<ProfileHero />
 			</div>
 
-			{/* bottom */}
-			<div className='flex xl:flex-row flex-col gap-[40px]'>
-				<div className='w-full'>
-					<ProfileJourney />
-				</div>
-				<div className='max-w-[560px] w-full'>
+			{/* content */}
+			<div className='w-full space-y-[40px] lg:pb-[32px]'>
+				<ProfileJourney />
+
+				<div className='flex lg:flex-row flex-col lg:space-x-[40px] max-lg:space-y-[40px]'>
+					<AppointmentsHistory />
 					<ProfileHistory />
 				</div>
 			</div>

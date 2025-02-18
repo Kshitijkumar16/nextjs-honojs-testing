@@ -13,7 +13,7 @@ import { usePathname } from "next/navigation";
 import { Models } from "node-appwrite";
 import React, { useEffect, useRef, useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
-import { Moon, Sun } from "lucide-react";
+import { Moon, Settings, Sun } from "lucide-react";
 import { useLogout } from "@/mutations/auth-feature/use-logout";
 import FlipButton from "../ui/flip-button";
 
@@ -63,7 +63,7 @@ const DesktopNavbar = ({ data }: DashLineProps) => {
 	};
 
 	return (
-		<div className='px py-[24px] flex justify-between items-center bg-black '>
+		<div className='px py-[24px] flex justify-between items-center bg-black'>
 			<div className='flex items-center gap-10'>
 				<p className='text-white font-branch text-[20px] tracking-wider'>
 					Modern Therapy
@@ -102,7 +102,7 @@ const DesktopNavbar = ({ data }: DashLineProps) => {
 				</div>
 			</div>
 
-			<div className='flex items-center gap-10'>
+			<div className='flex items-center gap-5'>
 				<div className='max-md:hidden'>
 					<Link
 						href={PROFILEPAGE_URL}
@@ -148,19 +148,27 @@ const DesktopNavbar = ({ data }: DashLineProps) => {
 							setDropDownOpen((prev) => (prev = !prev));
 						}}
 						className={cn(
-							"block px-3 py-3 border rounded-[12px]",
-							"transition-colors duration-200 ease-in-out",
-							dropDownOpen
-								? "border-white/20"
-								: "border-transparent hover:border-white/20"
+							"block group px-3 py-3 rounded-[12px]"
+							// "transition-colors border duration-200 ease-in-out",
+							// dropDownOpen
+							// 	? "border-white/20"
+							// 	: "border-transparent hover:border-white/20"
 						)}
 					>
-						<div className={cn("flex flex-col gap-2.5 ")}>
-							<div className='bg-white h-[1px] w-[40px] rounded-full' />
-							<motion.div
-								animate={{ x: dropDownOpen ? "0px" : "19px" }}
-								transition={{ duration: 0.2, ease: "easeInOut" }}
-								className='bg-white h-[1px] w-[20px] rounded-full'
+						<div
+							className={cn(
+								dropDownOpen
+									? "opacity-100"
+									: "opacity-50 group-hover:opacity-100",
+								"transition-opacity duration-300 ease-in-out"
+							)}
+						>
+							<Settings
+								className={cn(
+									"text-white size-[24px]",
+									"transition-all duration-700 ease-in-out",
+									dropDownOpen && "rotate-90"
+								)}
 							/>
 						</div>
 					</button>

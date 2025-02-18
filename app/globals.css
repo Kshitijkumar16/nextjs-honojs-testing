@@ -21,7 +21,7 @@ body {
 
 @layer utilities {
   .b-text {
-    @apply text-[16px] font-mona font-light tracking-wide leading-relaxed;
+    @apply text-[16px] font-mona font-light tracking-wide;
   }
 
   .label {
@@ -97,7 +97,7 @@ body {
   }
 
   .dc-header {
-    @apply border-b-white/20 pt-[20px] flex justify-between items-center
+    @apply border-b-white/20 pt-[32px] flex justify-between items-center
   }
 
   .dc-title {
@@ -131,4 +131,5 @@ body {
   .sub-title {
     @apply text-[16px] text-white/90 font-mona tracking-wide border-b border-b-white/20 pb-[12px] mb-[12px]
   }
+  
 }

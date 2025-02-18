@@ -15,21 +15,20 @@ const ProfileJourney = () => {
 		useState<ProfilePersonalFilter>("Your mantras");
 
 	return (
-		<div className='dc-container'>
-			<div className='dc-header'>
-				<div className='dc-icon-div'>
-					<Heart className='dc-icon' />
-					<p className='dc-title'>The journey</p>
-				</div>
-				<div className='h-[40px]'></div>
+		<div className=''>
+			<div className='flex items-center gap-3'>
+				<Heart className='dc-icon' />
+				<p className='whitespace-nowrap text-white font-branch text-[20px] tracking-wider'>
+					The journey
+				</p>
 			</div>
 
-			<div className='flex mt-6 gap-4'>
+			<div className='flex overflow-hidden overflow-x-scroll mt-6 gap-4'>
 				{ProfilePersonalFilters.map((filter) => (
 					<div
 						key={filter}
 						className={cn(
-							"relative w-full flex justify-center border rounded-full",
+							"relative px-4 flex justify-center border rounded-full",
 							personalActiveFilter === filter
 								? "border-white/90"
 								: "border-white/10"
@@ -58,7 +57,7 @@ const ProfileJourney = () => {
 				))}
 			</div>
 			{/* content 1 */}
-			<div className='mt-6 h-[400px]'></div>
+			<div className='mt-6 h-[400px] dc-container'></div>
 		</div>
 	);
 };

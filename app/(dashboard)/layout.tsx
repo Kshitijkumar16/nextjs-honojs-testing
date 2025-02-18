@@ -17,12 +17,13 @@ const DashboardLayout = async ({ children }: { children: React.ReactNode }) => {
 					<div className='fixed z-50 w-full top-0 left-0'>
 						<DesktopNavbar data={user} />
 					</div>
-					<div className='h-[94px] pointer-events-none'></div>
+					<div className='h-[98px] pointer-events-none'></div>
 					{children}
 				</div>
-				<div className='fixed z-10 bottom-0 left-1/2 -translate-x-1/2'>
+				<div className='fixed z-10 -bottom-[2px] left-1/2 -translate-x-1/2'>
 					<MobileNavbar />
 				</div>
+				<div className='md:hidden h-[112px]' />
 			</main>
 		</div>
 	);
