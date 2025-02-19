@@ -57,7 +57,7 @@ const PurchaseHistory = () => {
 			</div>
 
 			{/* sort */}
-			<div className='dc-px flex mt-3 gap-3'>
+			<div className='dc-px flex overflow-x-scroll hide-scrollbar mt-3 gap-3'>
 				<div className='filter-div'>
 					<CircleChevronUp className='filter-icon' />
 					<p className='filter-text'>Date</p>
@@ -65,7 +65,7 @@ const PurchaseHistory = () => {
 				</div>
 				<div className='filter-div'>
 					<Calendar className='filter-icon' />
-					<p className='filter-text'>All time</p>
+					<p className='filter-text whitespace-nowrap'>All time</p>
 					<ChevronDown className='filter-icon' />
 				</div>
 			</div>
@@ -86,7 +86,7 @@ const PurchaseHistory = () => {
 						{ProfileFillerData.map((data, index) => (
 							<div
 								key={data.img.blurDataURL}
-								className='py-[20px] first:border-t-transparent border-t border-t-white/10 px-4 flex justify-start items-start w-[520px] '
+								className='py-[20px] first:border-t-transparent border-t border-t-white/10 px-4 flex justify-start items-start w-[520px] h-[62px]'
 							>
 								<div className='flex lg:gap-8 gap-6 justify-start items-start'>
 									<p className='data-text opacity-30 w-[20px]'>
@@ -98,7 +98,7 @@ const PurchaseHistory = () => {
 									</p>
 									<p className='w-[72px] data-text whitespace-nowrap'>
 										{index + 2}{" "}
-										<span className='ml-2 p-1.5 text-center border border-white/20 text-[10px] rounded-full'>
+										<span className='ml-2 p-1 text-center border border-white/20 text-[10px] rounded-full'>
 											Mt
 										</span>
 									</p>

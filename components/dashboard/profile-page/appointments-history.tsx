@@ -91,7 +91,7 @@ const AppointmentsHistory = () => {
 						{ProfileFillerData.map((data, index) => (
 							<div
 								key={data.img.blurDataURL}
-								className='py-[20px] first:border-t-transparent border-t border-t-white/10 px-4 flex justify-start items-start lg:w-[512px] w-[488px]'
+								className='py-[20px] first:border-t-transparent border-t border-t-white/10 px-4 flex justify-start items-start lg:w-[512px] w-[488px] h-[62px]'
 							>
 								<div className='flex lg:gap-8 gap-6 justify-start items-start'>
 									<p className='data-text opacity-30 w-[20px]'>
