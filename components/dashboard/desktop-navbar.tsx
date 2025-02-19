@@ -190,7 +190,7 @@ const DesktopNavbar = ({ data }: DashLineProps) => {
 									transition: { duration: 0.2, ease: "easeIn" },
 								}}
 								ref={dropdownRef}
-								className='absolute origin-top-right right-0 top-[60px] w-[280px] bg-black border border-white/20 rounded-[24px] z-50 p-2 overflow-hidden'
+								className='absolute origin-top-right 2xl:right-[6px] xl:-right-[4px] right-0 top-[64px] w-[280px] bg-black border border-white/20 rounded-[24px] z-50 p-2 overflow-hidden'
 							>
 								<div className='pt-8 pb-6 bg-black mx-5 border-b border-b-white/20'>
 									<div className='flex flex-col justify-center items-center'>

@@ -7,7 +7,6 @@
 
 /* Hide scrollbar for IE, Edge and Firefox */
 body {
-
   padding: 0;
   margin: 0;
 }
@@ -103,7 +102,7 @@ body {
     @apply rounded-[24px] border border-white/20 overflow-hidden
   }
 
-  .dc-px{
+  .dc-px {
     @apply lg:px-9 md:px-6 px-5
   }
 
@@ -160,6 +159,6 @@ body {
   }
 
   .table-index-text {
-    @apply  font-mona text-[16px] text-white/20 font-light tracking-wide whitespace-nowrap capitalize
+    @apply font-mona text-[16px] text-white/20 font-light tracking-wide whitespace-nowrap capitalize
   }
 }

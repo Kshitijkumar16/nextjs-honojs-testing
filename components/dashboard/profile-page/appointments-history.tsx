@@ -47,7 +47,7 @@ const AppointmentsHistory = () => {
 	};
 
 	return (
-		<div className='dc-container w-full pb-6'>
+		<div className='dc-container w-full max-sm:max-w-[calc(100vw-(20px+20px))] pb-6'>
 			<div className='dc-header dc-px'>
 				<div className='dc-icon-div'>
 					<History className='dc-icon' />
@@ -77,7 +77,7 @@ const AppointmentsHistory = () => {
 
 			{/* content 2 */}
 			<div className='dc-px'>
-				<div className='rounded-[12px] relative overflow-x-scroll hide-scrollbar'>
+				<div className='rounded-[12px] relative overflow-x-scroll hide-scrollbar '>
 					<div className='mt-6 flex px-4 lg:w-[512px] w-[488px] pb-3 border-b border-b-white/10'>
 						<div className='flex lg:gap-8 gap-6 justify-start items-start'>
 							<p className='w-[20px] table-index-text'>#</p>
@@ -125,16 +125,16 @@ const AppointmentsHistory = () => {
 							</div>
 						))}
 					</div>
-				</div>
 
-				{/* pagination */}
-				<div className='w-full mt-2'>
+					{/* pagination */}
+					{/* <div className='w-full mt-2'>
 					<button
 						className='dc-button w-full'
 						onClick={() => {}}
 					>
 						<p className='dc-button-text'>Load more</p>
 					</button>
+				</div> */}
 				</div>
 			</div>
 		</div>

@@ -16,7 +16,7 @@ const ProfileJourney = () => {
 
 	return (
 		<div className=''>
-			<div className='flex items-center gap-3'>
+			{/* <div className='flex items-center gap-3'>
 				<Heart className='dc-icon' />
 				<p className='whitespace-nowrap text-white font-branch text-[20px] tracking-wider'>
 					The journey
@@ -55,7 +55,7 @@ const ProfileJourney = () => {
 						</button>
 					</div>
 				))}
-			</div>
+			</div> */}
 			{/* content 1 */}
 			<div className='mt-6 h-[400px] dc-container'></div>
 		</div>

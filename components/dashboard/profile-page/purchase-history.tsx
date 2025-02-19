@@ -47,7 +47,7 @@ const PurchaseHistory = () => {
 	};
 
 	return (
-		<div className='dc-container w-full pb-6'>
+		<div className='dc-container w-full max-sm:max-w-[calc(100vw-(20px+20px))] pb-6'>
 			<div className='dc-header dc-px'>
 				<div className='dc-icon-div'>
 					<History className='dc-icon' />
@@ -113,14 +113,14 @@ const PurchaseHistory = () => {
 				</div>
 
 				{/* pagination */}
-				<div className='w-full mt-2'>
+				{/* <div className='w-full mt-2'>
 					<button
 						className='dc-button w-full'
 						onClick={() => {}}
 					>
 						<p className='dc-button-text'>Load more</p>
 					</button>
-				</div>
+				</div> */}
 			</div>
 		</div>
 	);
