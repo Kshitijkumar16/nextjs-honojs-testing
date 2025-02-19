@@ -11,7 +11,7 @@ const ProfileHero = () => {
 	const [showMobile, setShowMobile] = useState<boolean>(false);
 
 	return (
-		<div className='h-full overflow-y-scroll lg:pb-9 pb-6'>
+		<div className='hide-scrollbar h-full overflow-y-scroll lg:pb-9 pb-6'>
 			{/* name & photo */}
 			<div className='flex flex-col justify-center items-center'>
 				<div className='mt-[64px] flex justify-between items-start'>

@@ -3,20 +3,27 @@
 @tailwind utilities;
 
 /* Hide scrollbar for Chrome, Safari and Opera */
-::-webkit-scrollbar {
-  display: none;
-}
+
 
 /* Hide scrollbar for IE, Edge and Firefox */
 body {
-  -ms-overflow-style: none;
-  /* IE and Edge */
-  scrollbar-width: none;
-  /* Firefox */
 
   padding: 0;
   margin: 0;
-  cursor: default;
+}
+
+@layer base {
+  .hide-scrollbar {
+    -ms-overflow-style: none;
+    /* IE and Edge */
+    scrollbar-width: none;
+    /* Firefox */
+  }
+
+  .hide-scrollbar::-webkit-scrollbar {
+    display: none;
+    /* Chrome, Safari, and Opera */
+  }
 }
 
 @layer utilities {
@@ -45,7 +52,7 @@ body {
   }
 
   .px {
-    @apply lg:px-14 sm:px-8 px-5;
+    @apply 2xl:px-14 lg:px-12 sm:px-8 px-5;
   }
 
   .pl {
@@ -93,7 +100,11 @@ body {
   }
 
   .dc-container {
-    @apply lg:px-9 md:px-6 px-5 pb-8 rounded-[24px] border border-white/20 overflow-hidden
+    @apply rounded-[24px] border border-white/20 overflow-hidden
+  }
+
+  .dc-px{
+    @apply lg:px-9 md:px-6 px-5
   }
 
   .dc-header {
@@ -109,7 +120,7 @@ body {
   }
 
   .dc-button {
-    @apply px-4 py-1.5 rounded-full border border-white/30 block
+    @apply px-4 py-2 rounded-full border border-white/20 block
   }
 
   .dc-button-text {
@@ -131,5 +142,24 @@ body {
   .sub-title {
     @apply text-[16px] text-white/90 font-mona tracking-wide border-b border-b-white/20 pb-[12px] mb-[12px]
   }
-  
+
+  .filter-div {
+    @apply border border-white/10 rounded-full cursor-pointer py-1.5 pr-2 pl-2 flex items-center gap-2
+  }
+
+  .filter-text {
+    @apply text-[12px] text-white/40 font-mona tracking-wide
+  }
+
+  .filter-icon {
+    @apply text-white/40 h-[20px] w-[20px] stroke-1
+  }
+
+  .data-text {
+    @apply text-[14px] font-mona tracking-wide text-white;
+  }
+
+  .table-index-text {
+    @apply  font-mona text-[16px] text-white/20 font-light tracking-wide whitespace-nowrap capitalize
+  }
 }

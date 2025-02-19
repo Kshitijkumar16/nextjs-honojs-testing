@@ -14,23 +14,23 @@ const ProfilePage = async () => {
 	if (user.phoneVerification === false) redirect("/onboarding");
 
 	return (
-		<div className='min-h-screen px flex lg:flex-row flex-col justify-between lg:space-x-[40px]'>
+		<div className='min-h-screen px flex xl:flex-row flex-col xl:space-x-[32px] space-y-[32px]'>
 			{/* sidebar */}
 			<div
 				className={cn(
-					"w-full rounded-[24px] border border-white/20",
-					"lg:sticky lg:top-[98px] lg:max-w-[400px] lg:max-h-[calc(100svh-128px)] lg:overflow-y-scroll",
-					"lg:px-9 md:px-6 px-5"
+					"xl:min-w-[400px] lg:min-w-[380px] rounded-[24px] border border-white/20",
+					"xl:sticky xl:top-[98px] xl:max-w-[400px] xl:max-h-[calc(100svh-120px)] xl:overflow-y-scroll hide-scrollbar",
+					"xl:px-9 md:px-6 px-5"
 				)}
 			>
 				<ProfileHero />
 			</div>
 
 			{/* content */}
-			<div className='w-full space-y-[40px] lg:pb-[32px]'>
+			<div className='xl:max-w-[calc(100dvw-(396px+84px+84px))] space-y-[32px] xl:pb-[24px]'>
 				<ProfileJourney />
 
-				<div className='flex lg:flex-row flex-col lg:space-x-[40px] max-lg:space-y-[40px]'>
+				<div className='flex xl:flex-row flex-col xl:space-x-[32px] max-xl:space-y-[32px]'>
 					<AppointmentsHistory />
 					<ProfileHistory />
 				</div>

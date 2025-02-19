@@ -23,7 +23,7 @@ const ProfileJourney = () => {
 				</p>
 			</div>
 
-			<div className='flex overflow-hidden overflow-x-scroll mt-6 gap-4'>
+			<div className='flex overflow-hidden overflow-x-scroll hide-scrollbar mt-6 gap-4'>
 				{ProfilePersonalFilters.map((filter) => (
 					<div
 						key={filter}
