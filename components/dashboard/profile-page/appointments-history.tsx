@@ -127,14 +127,14 @@ const AppointmentsHistory = () => {
 					</div>
 
 					{/* pagination */}
-					{/* <div className='w-full mt-2'>
+					<div className='w-full mt-2'>
 					<button
 						className='dc-button w-full'
 						onClick={() => {}}
 					>
 						<p className='dc-button-text'>Load more</p>
 					</button>
-				</div> */}
+				</div>
 				</div>
 			</div>
 		</div>
