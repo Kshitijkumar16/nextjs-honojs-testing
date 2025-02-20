@@ -4,9 +4,9 @@ import React from "react";
 
 const DashHero = () => {
 	return (
-		<div className='px'>
-			<div className='relative aspect-square rounded-[24px] border border-white p-5 overflow-hidden'>
-				<div className='absolute z-0 top-0 left-0 h-full w-full'>
+		<div className=''>
+			<div className='w-full relative aspect-square '>
+				<div className='absolute rounded-[12px] overflow-hidden z-0 top-0 left-0 h-full w-full'>
 					<Image
 						src={images.dashHero}
 						alt=''

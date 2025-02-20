@@ -3,6 +3,7 @@ import { DashboardTabs } from "@/constants/dashboard-index";
 import { cn } from "@/lib/utils";
 import React, { useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
+import { Amphora, Heart, StretchVertical } from "lucide-react";
 
 declare type DashActiveTab = "mantra" | "appointments" | "learnings";
 
@@ -10,9 +11,20 @@ const DashContent = () => {
 	const [activeTab, setActiveTab] = useState<DashActiveTab>("mantra");
 
 	return (
-		<div className='mt-[40px] relative z-0 overflow-hidden'>
+		<div className='relative z-0 overflow-hidden flex flex-col justify-between h-full space-y-[32px]'>
+			<div className='sub-container h-full'>
+				<div className='flex justify-between items-center'>
+					<div></div>
+
+					<div className='dc-button'>
+						<p className='dc-button-text'>12 Feb, 13:00:02</p>
+					</div>
+				</div>
+			</div>
+
+			<div className='sub-container h-[300px]'></div>
 			{/* filter */}
-			<div className='flex gap-[12px] overflow-x-scroll scrollbar-hide px mb-[40px]'>
+			{/* <div className='flex gap-[12px] overflow-x-scroll hide-scrollbar px mb-[40px]'>
 				{DashboardTabs.map((tab) => (
 					<div
 						key={tab.value}
@@ -36,10 +48,10 @@ const DashContent = () => {
 						</button>
 					</div>
 				))}
-			</div>
+			</div> */}
 
 			{/* content */}
-			<AnimatePresence>
+			{/* <AnimatePresence>
 				{activeTab === "mantra" && (
 					<div className='flex flex-col justify-center items-center'>
 						<p className='px dash-hero-heading text-white text-center'>
@@ -51,7 +63,7 @@ const DashContent = () => {
 						</p>
 					</div>
 				)}
-			</AnimatePresence>
+			</AnimatePresence> */}
 		</div>
 	);
 };
