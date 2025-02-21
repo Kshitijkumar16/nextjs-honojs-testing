@@ -6,6 +6,7 @@ import { redirect } from "next/navigation";
 import DashHero from "@/components/dashboard/dash-page/dash-hero";
 import DashContent from "@/components/dashboard/dash-page/dash-content";
 import { cn } from "@/lib/utils";
+import FeaturesList from "@/components/dashboard/features-list";
 
 const DashboardPage = async () => {
 	const user = await getCurrent();
@@ -16,6 +17,7 @@ const DashboardPage = async () => {
 	return (
 		<div className=''>
 			<DashHero data={user} />
+			<FeaturesList />
 		</div>
 	);
 };

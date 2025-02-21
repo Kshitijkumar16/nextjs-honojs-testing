@@ -3,7 +3,6 @@ import ProfileHistory from "@/components/dashboard/profile-page/purchase-history
 import ProfileHero from "@/components/dashboard/profile-page/profile-hero";
 import { redirect } from "next/navigation";
 import AppointmentsHistory from "@/components/dashboard/profile-page/appointments-history";
-import ProfileFeaturesComponent from "@/components/dashboard/profile-page/profile-features";
 
 const ProfilePage = async () => {
 	const user = await getCurrent();

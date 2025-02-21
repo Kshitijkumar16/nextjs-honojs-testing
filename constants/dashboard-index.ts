@@ -91,7 +91,7 @@ export const ProfileFillerData: ProfileDataInterface[] = [
 	},
 ];
 
-export const ProfileFeatures: {
+export const Features: {
 	heading: string;
 	desc: string;
 	img: StaticImageData;

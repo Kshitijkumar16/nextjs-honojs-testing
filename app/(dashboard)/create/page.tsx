@@ -1,6 +1,5 @@
 import { getCurrent } from "@/app/actions";
 import CreateStats from "@/components/dashboard/create-page/create-stats";
-import { ProfileFeatures } from "@/constants/dashboard-index";
 import { redirect } from "next/navigation";
 import React from "react";
 
