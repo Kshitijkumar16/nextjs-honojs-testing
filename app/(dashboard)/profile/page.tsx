@@ -14,22 +14,13 @@ const ProfilePage = async () => {
 	if (user.phoneVerification === false) redirect("/onboarding");
 
 	return (
-		<div className='px flex xl:flex-row flex-col items-start justify-start xl:space-x-[32px] max-xl:space-y-[32px]'>
+		<div className='px '>
 			{/* sidebar */}
-			<div
-				className={cn(
-					"xl:min-w-[400px] lg:min-w-[380px] rounded-[24px] border border-white/20",
-					"xl:sticky xl:top-[98px] xl:max-w-[400px] xl:max-h-[calc(100svh-120px)] xl:overflow-y-scroll hide-scrollbar",
-					"xl:px-9 md:px-6 px-5"
-				)}
-			>
-				<ProfileHero />
-			</div>
+
+			<ProfileHero />
 
 			{/* content */}
-			<div className='2xl:max-w-[calc(100vw-(400px+84px+84px))] lg:max-w-[calc(100vw-(380px+72px+72px))] space-y-[32px] xl:pb-[24px]'>
-				<ProfileJourney />
-
+			<div className=''>
 				<div className='flex xl:flex-row flex-col xl:space-x-[32px] max-xl:space-y-[32px]'>
 					<AppointmentsHistory />
 					<ProfileHistory />

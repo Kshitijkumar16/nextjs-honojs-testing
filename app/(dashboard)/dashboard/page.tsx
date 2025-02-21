@@ -21,7 +21,7 @@ const DashboardPage = async () => {
 					"xl:px-9 md:px-6 px-5 py"
 				)}
 			>
-				<DashHero />
+				<DashHero data={user} />
 			</div>
 			<div className='w-full pr'>
 				<DashContent />

@@ -13,7 +13,7 @@ import { usePathname } from "next/navigation";
 import { Models } from "node-appwrite";
 import React, { useEffect, useRef, useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
-import { Moon, Settings, Sun } from "lucide-react";
+import { MenuIcon, Moon, Settings, Sun } from "lucide-react";
 import { useLogout } from "@/mutations/auth-feature/use-logout";
 import FlipButton from "../ui/flip-button";
 
@@ -163,13 +163,7 @@ const DesktopNavbar = ({ data }: DashLineProps) => {
 								"transition-opacity duration-300 ease-in-out"
 							)}
 						>
-							<Settings
-								className={cn(
-									"text-white size-[24px]",
-									"transition-all duration-700 ease-in-out",
-									dropDownOpen && "rotate-90"
-								)}
-							/>
+							<p className='b-text text-white'>Menu</p>
 						</div>
 					</button>
 

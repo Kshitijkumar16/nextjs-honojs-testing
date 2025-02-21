@@ -76,33 +76,6 @@ const ProfileHero = () => {
 					</div>
 				</button>
 
-				{/* lg */}
-				<div
-					className={cn(
-						"hidden lg:flex",
-						"w-full justify-between items-center rounded-[12px]"
-					)}
-				>
-					<div className='flex gap-3'>
-						<ChartArea className='dc-icon' />
-						<p className='dc-title'>Stats & overview</p>
-					</div>
-				</div>
-
-				<div className='hidden lg:flex flex-col'>
-					<div className='flex justify-between gap-4 mt-[16px]'>
-						<div className='flex-1 sub-container aspect-[5/3]'></div>
-						<div className='flex-1 sub-container aspect-[5/3]'></div>
-					</div>
-					<div className='flex justify-between gap-4 mt-[16px]'>
-						<div className='flex-1 sub-container aspect-[5/3]'></div>
-						<div className='flex-1 sub-container aspect-[5/3]'></div>
-					</div>
-					<div className='flex justify-between gap-4 mt-[16px]'>
-						<div className='flex-1 sub-container aspect-[5/3]'></div>
-					</div>
-				</div>
-
 				{/* mobile */}
 				<AnimatePresence>
 					{showMobile && (
