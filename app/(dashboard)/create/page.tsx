@@ -1,5 +1,6 @@
 import { getCurrent } from "@/app/actions";
 import CreateStats from "@/components/dashboard/create-page/create-stats";
+import { ProfileFeatures } from "@/constants/dashboard-index";
 import { redirect } from "next/navigation";
 import React from "react";
 
@@ -10,8 +11,10 @@ const CreatePage = async () => {
 	if (user.phoneVerification === false) redirect("/onboarding");
 
 	return (
-		<div className='min-h-screen'>
+		<div className=''>
 			<CreateStats />
+
+			<div className='h-[80px] bg-black' />
 		</div>
 	);
 };

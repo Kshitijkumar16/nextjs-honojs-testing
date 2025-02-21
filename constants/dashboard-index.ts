@@ -90,3 +90,35 @@ export const ProfileFillerData: ProfileDataInterface[] = [
 		img: images.mg9,
 	},
 ];
+
+export const ProfileFeatures: {
+	heading: string;
+	desc: string;
+	img: StaticImageData;
+	attributes: string[];
+}[] = [
+	{
+		heading: "Stats & info throughtout their therapy journey",
+		desc: "Used by Duolingo. Shows realtime info and builds trust, adds a feeling of progress right from the start and also sets a goal. ",
+		img: images.mg10,
+		attributes: ["Gamification", "Sets clear goals", "Feelings of progress"],
+	},
+	{
+		heading: "Memories (images) from the therapy journey ",
+		desc: "Used by Google itself. Photos from events, sessions, external activites, etc. Collaege of different memories.",
+		img: images.mg10,
+		attributes: [""],
+	},
+	{
+		heading: "Their list of learnings from different sessions",
+		desc: "Used by Spotify. Real time and instantaneous trust building",
+		img: images.mg10,
+		attributes: [""],
+	},
+	{
+		heading: "Their mottos throughtout your different sessions",
+		desc: "Like an Instagram bio. How we usually keep a sticky note besides a mirror or bed.",
+		img: images.mg10,
+		attributes: [""],
+	},
+];
