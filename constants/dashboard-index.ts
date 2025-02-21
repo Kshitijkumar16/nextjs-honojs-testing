@@ -94,31 +94,55 @@ export const ProfileFillerData: ProfileDataInterface[] = [
 export const Features: {
 	heading: string;
 	desc: string;
-	img: StaticImageData;
+	img: StaticImageData | undefined;
 	attributes: string[];
 }[] = [
 	{
 		heading: "Stats & info throughtout their therapy journey",
 		desc: "Used by Duolingo. Shows realtime info and builds trust, adds a feeling of progress right from the start and also sets a goal. ",
-		img: images.mg10,
+		img: images.duoStats,
 		attributes: ["Gamification", "Sets clear goals", "Feelings of progress"],
 	},
 	{
-		heading: "Memories (images) from the therapy journey ",
+		heading: "Memories (pictures) / Milestones Gallery ",
 		desc: "Used by Google itself. Photos from events, sessions, external activites, etc. Collaege of different memories.",
-		img: images.mg10,
-		attributes: [""],
+		img: images.googlePhotos,
+		attributes: ["Emotional impact", "Visual storytelling"],
 	},
 	{
-		heading: "Their list of learnings from different sessions",
+		heading: "Each week's learning / eventually a list of learnings",
 		desc: "Used by Spotify. Real time and instantaneous trust building",
-		img: images.mg10,
-		attributes: [""],
+		img: images.learnings,
+		attributes: ["Tracks progress", "Reflections & reminicing"],
 	},
 	{
-		heading: "Their mottos throughtout your different sessions",
+		heading: "Mottos and affirmations (by you) / eventual list",
 		desc: "Like an Instagram bio. How we usually keep a sticky note besides a mirror or bed.",
-		img: images.mg10,
-		attributes: [""],
+		img: images.motto,
+		attributes: ["Personalization", "Perceived personal attention"],
+	},
+	{
+		heading: "Daily check ins and to do list for clients",
+		desc: "Like an Instagram bio. How we usually keep a sticky note besides a mirror or bed.",
+		img: images.notion,
+		attributes: ["Personalization", "Gamification", "Continuous progress"],
+	},
+	{
+		heading: "Course / journey progress dashboard",
+		desc: "Used by Duolingo. Adds a sense of achievement and motivates clients to stay engaged.",
+		img: images.shadcn,
+		attributes: ["Gamification", "Keeps motivated"],
+	},
+	{
+		heading: "Resource library / self care tools",
+		desc: "Your resources for a specific client, can be personal / general.",
+		img: undefined,
+		attributes: ["Self improvement"],
+	},
+	{
+		heading: "Community Forum and Support Groups",
+		desc: "Optional. For clients to connect, share experiences, and find peer support.",
+		img: undefined,
+		attributes: ["Community", "Peer support"],
 	},
 ];

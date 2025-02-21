@@ -19,6 +19,14 @@ import login from "@/public/images/login.png";
 import kshitij from "@/public/images/kshitij.png";
 import dashHero from "@/public/images/dashhero.png";
 
+import duoStats from "@/public/images/duolingo-stats.png";
+import spotifyList from "@/public/images/spotify-list.png";
+import googlePhotos from "@/public/images/googlePhotos.png";
+import motto from "@/public/images/motto.png";
+import learnings from "@/public/images/learnings.png";
+import notion from "@/public/images/notion.png";
+import shadcn from "@/public/images/shadcn.png";
+
 export default {
 	HeroImage,
 	mg1,
@@ -38,5 +46,11 @@ export default {
 	mg15,
 	login,
 	Instagram,
-	kshitij, dashHero
+	kshitij,
+	dashHero,
+	spotifyList,
+	duoStats,
+	googlePhotos,
+	motto,
+	learnings,notion,shadcn
 };

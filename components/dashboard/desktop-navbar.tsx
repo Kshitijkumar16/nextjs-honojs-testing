@@ -12,7 +12,12 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { Models } from "node-appwrite";
 import React, { useEffect, useRef, useState } from "react";
-import { AnimatePresence, motion } from "framer-motion";
+import {
+	AnimatePresence,
+	motion,
+	useMotionValueEvent,
+	useScroll,
+} from "framer-motion";
 import { MenuIcon, Moon, Settings, Sun } from "lucide-react";
 import { useLogout } from "@/mutations/auth-feature/use-logout";
 import FlipButton from "../ui/flip-button";
@@ -28,6 +33,19 @@ const DesktopNavbar = ({ data }: DashLineProps) => {
 
 	const dropdownRef = useRef<HTMLDivElement>(null);
 	const dropDownTriggerRef = useRef<HTMLButtonElement>(null);
+
+	const [isHidden, setIsHidden] = useState(false);
+	const lastYRef = useRef(0);
+	const { scrollY } = useScroll();
+
+	useMotionValueEvent(scrollY, "change", (y) => {
+		const difference = y - lastYRef.current;
+		if (Math.abs(difference) > 50) {
+			setIsHidden(difference > 0);
+
+			lastYRef.current = y;
+		}
+	});
 
 	useEffect(() => {
 		const handleClickOutside = (event: MouseEvent) => {
@@ -63,7 +81,12 @@ const DesktopNavbar = ({ data }: DashLineProps) => {
 	};
 
 	return (
-		<div className='px py-[24px] flex justify-between items-center bg-black'>
+		<motion.div
+			animate={isHidden ? "hidden" : "visible"}
+			transition={{ duration: 0.2 }}
+			variants={{ hidden: { y: "-100%" }, visible: { y: "0%" } }}
+			className='px py-[24px] flex justify-between items-center bg-black'
+		>
 			<div className='flex items-center gap-10'>
 				<p className='text-white font-branch text-[20px] tracking-wider'>
 					Modern Therapy
@@ -323,7 +346,7 @@ const DesktopNavbar = ({ data }: DashLineProps) => {
 					</AnimatePresence>
 				</div>
 			</div>
-		</div>
+		</motion.div>
 	);
 };
 
