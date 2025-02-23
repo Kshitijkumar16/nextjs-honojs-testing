@@ -45,6 +45,9 @@ const DesktopNavbar = ({ data }: DashLineProps) => {
 
 			lastYRef.current = y;
 		}
+		if (isHidden) {
+			setDropDownOpen(false);
+		}
 	});
 
 	useEffect(() => {
@@ -84,8 +87,8 @@ const DesktopNavbar = ({ data }: DashLineProps) => {
 		<motion.div
 			animate={isHidden ? "hidden" : "visible"}
 			transition={{ duration: 0.2 }}
-			variants={{ hidden: { y: "-100%" }, visible: { y: "0%" } }}
-			className='px py-[24px] flex justify-between items-center bg-black'
+			variants={{ hidden: { y: "-130%" }, visible: { y: "0%" } }}
+			className='px py-4 flex justify-between items-center bg-black'
 		>
 			<div className='flex items-center gap-10'>
 				<p className='text-white font-branch text-[20px] tracking-wider'>
@@ -129,13 +132,7 @@ const DesktopNavbar = ({ data }: DashLineProps) => {
 				<div className='max-md:hidden'>
 					<Link
 						href={PROFILEPAGE_URL}
-						className={cn(
-							"block group py-1 pr-1 pl-4 rounded-full",
-							"transition-colors border duration-500 ease-in-out",
-							pathName === PROFILEPAGE_URL
-								? "border-white/20"
-								: "border-transparent"
-						)}
+						className={cn("block group py-1 pr-1 pl-4 rounded-full")}
 					>
 						<div className='flex items-center gap-4'>
 							<p
@@ -155,8 +152,8 @@ const DesktopNavbar = ({ data }: DashLineProps) => {
 										"rounded-full object-cover object-center border-2",
 										"transition-colors duration-300 ease-in-out",
 										pathName === PROFILEPAGE_URL
-											? "border-white h-[32px] w-[32px]"
-											: "border-transparent group-hover:border-white h-[32px] w-[32px]"
+											? "border-white h-[28px] w-[28px]"
+											: "border-transparent group-hover:border-white h-[28px] w-[28px]"
 									)}
 								/>
 							</div>
@@ -207,7 +204,7 @@ const DesktopNavbar = ({ data }: DashLineProps) => {
 									transition: { duration: 0.2, ease: "easeIn" },
 								}}
 								ref={dropdownRef}
-								className='absolute origin-top-right 2xl:right-[6px] xl:-right-[4px] right-0 top-[64px] w-[280px] bg-black border border-white/20 rounded-[24px] z-50 p-2 overflow-hidden'
+								className='absolute origin-top-right 2xl:right-[6px] xl:-right-[4px] right-0 top-[64px] w-[280px] bg-black border border-white/20 rounded-[16px] z-50 p-2 overflow-hidden'
 							>
 								<div className='pt-8 pb-6 bg-black mx-5 border-b border-b-white/20'>
 									<div className='flex flex-col justify-center items-center'>

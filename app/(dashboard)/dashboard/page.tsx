@@ -17,6 +17,8 @@ const DashboardPage = async () => {
 	return (
 		<div className=''>
 			<DashHero data={user} />
+
+			<div className='h-[800px]'></div>
 			<FeaturesList />
 		</div>
 	);

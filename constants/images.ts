@@ -26,6 +26,7 @@ import motto from "@/public/images/motto.png";
 import learnings from "@/public/images/learnings.png";
 import notion from "@/public/images/notion.png";
 import shadcn from "@/public/images/shadcn.png";
+import dashboardGroup from "@/public/images/dashboard-group.png";
 
 export default {
 	HeroImage,
@@ -52,5 +53,8 @@ export default {
 	duoStats,
 	googlePhotos,
 	motto,
-	learnings,notion,shadcn
+	learnings,
+	notion,
+	shadcn,
+	dashboardGroup,
 };
